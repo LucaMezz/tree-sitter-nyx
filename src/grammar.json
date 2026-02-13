@@ -170,7 +170,7 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "parameter"
         },
         {
           "type": "REPEAT",
@@ -183,16 +183,159 @@
               },
               {
                 "type": "SYMBOL",
-                "name": "identifier"
+                "name": "parameter"
               }
             ]
           }
         }
       ]
     },
+    "parameter": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "STRING",
+          "value": ":"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_annotation"
+        }
+      ]
+    },
     "type_annotation": {
-      "type": "SYMBOL",
-      "name": "identifier"
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type_u8"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_u16"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_u32"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_u64"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_i8"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_i16"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_i32"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_i64"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_f32"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_f64"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_bool"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        }
+      ]
+    },
+    "type_u8": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "u8"
+      }
+    },
+    "type_u16": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "u16"
+      }
+    },
+    "type_u32": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "u32"
+      }
+    },
+    "type_u64": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "u64"
+      }
+    },
+    "type_i8": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "i8"
+      }
+    },
+    "type_i16": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "i16"
+      }
+    },
+    "type_i32": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "i32"
+      }
+    },
+    "type_i64": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "i64"
+      }
+    },
+    "type_f32": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "f32"
+      }
+    },
+    "type_f64": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "f64"
+      }
+    },
+    "type_bool": {
+      "type": "TOKEN",
+      "content": {
+        "type": "STRING",
+        "value": "bool"
+      }
     },
     "expression": {
       "type": "CHOICE",

@@ -10,7 +10,8 @@
         "nyx"
       ],
       "injection-regex": "^nyx$",
-      "class-name": "TreeSitterNyx"
+      "class-name": "TreeSitterNyx",
+      "highlights": ["queries/highlights.scm"]
     }
   ],
   "metadata": {
