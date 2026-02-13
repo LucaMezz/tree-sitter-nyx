@@ -1,6 +1,10 @@
-fn main(x: i32, y: i32):
+fn main[T, U, V](x: i32, y: i32):
     let x: u64 = 5
+    const PI: f64 = 3.14
     let y = 10
+    let x: &i32 = 10
+    let z: *u32 = 345
+    let x: *raw = 389
 
 fn add(a: i32, b: i32) -> i32:
     a + b
@@ -8,3 +12,7 @@ fn add(a: i32, b: i32) -> i32:
 let x = 10
 
 type Integer = i32
+type DoubleRaw = **raw
+type Array[T] = SomeOther[T]
+
+const Hello = true

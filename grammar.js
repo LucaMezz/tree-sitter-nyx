@@ -20,8 +20,9 @@ export default grammar({
     _statement: $ => choice(
       $.function_definition,
       $.let_statement,
+      $.const_statement,
       $.type_statement,
-      $.comment
+      $.comment,
     ),
 
     comment: $ => token(seq("//", /.*/)),
@@ -29,6 +30,7 @@ export default grammar({
     function_definition: $ => seq(
       "fn",
       $.identifier,
+      optional($.generic_parameters),
       "(",
       optional($.parameters),
       ")",
@@ -49,9 +51,19 @@ export default grammar({
       $.newline
     ),
 
+    const_statement: $ => seq(
+      "const",
+      $.identifier,
+      optional(seq(":", $.type_annotation)),
+      "=",
+      $.expression,
+      $.newline
+    ),
+
     type_statement: $ => seq(
       "type",
       $.identifier,
+      optional($.generic_parameters),
       "=",
       $.type_annotation,
       $.newline
@@ -73,22 +85,38 @@ export default grammar({
       $.type_f32,
       $.type_f64,
       $.type_bool,
-      $.identifier
+      $.type_array,
+      $.type_ref,
+      $.type_ptr,
+      $.type_ptr_raw,
+      $.named
     ),
 
-    type_u8: $ => token("u8"),
-    type_u16: $ => token("u16"),
-    type_u32: $ => token("u32"),
-    type_u64: $ => token("u64"),
-    type_i8: $ => token("i8"),
-    type_i16: $ => token("i16"),
-    type_i32: $ => token("i32"),
-    type_i64: $ => token("i64"),
-    type_f32: $ => token("f32"),
-    type_f64: $ => token("f64"),
-    type_bool: $ => token("bool"),
+    named: $ => seq($.identifier, optional($.generic_arguments)),
+
+    generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
+
+    generic_parameters: $ => seq('[', sep1($.identifier, ","), ']'),
+
+    type_array: $ => seq("[", optional($.expression), "]", $.type_annotation),
+    type_ref: $ => seq("&", $.type_annotation),
+    type_ptr: $ => seq("*", $.type_annotation),
+    type_ptr_raw: $ => seq("*", "raw"),
+
+    type_u8: $ => "u8",
+    type_u16: $ => "u16",
+    type_u32: $ => "u32",
+    type_u64: $ => "u64",
+    type_i8: $ => "i8",
+    type_i16: $ => "i16",
+    type_i32: $ => "i32",
+    type_i64: $ => "i64",
+    type_f32: $ => "f32",
+    type_f64: $ => "f64",
+    type_bool: $ => "bool",
 
     expression: $ => choice(
+      $.boolean,
       $.number,
       $.string,
       $.identifier,
@@ -109,6 +137,8 @@ export default grammar({
     string: $ => seq('"', repeat(choice(/[^"]/, '""')), '"'),
 
     identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    boolean: $ => choice("true", "false"),
   }
 });
 

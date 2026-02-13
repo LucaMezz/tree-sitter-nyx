@@ -15,6 +15,11 @@
     }
   },
   {
+    "type": "boolean",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "call_expression",
     "named": true,
     "fields": {},
@@ -34,6 +39,33 @@
     }
   },
   {
+    "type": "const_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "expression",
     "named": true,
     "fields": {},
@@ -41,6 +73,10 @@
       "multiple": false,
       "required": true,
       "types": [
+        {
+          "type": "boolean",
+          "named": true
+        },
         {
           "type": "call_expression",
           "named": true
@@ -73,11 +109,19 @@
           "named": true
         },
         {
+          "type": "const_statement",
+          "named": true
+        },
+        {
           "type": "dedent",
           "named": true
         },
         {
           "type": "function_definition",
+          "named": true
+        },
+        {
+          "type": "generic_parameters",
           "named": true
         },
         {
@@ -112,6 +156,36 @@
     }
   },
   {
+    "type": "generic_arguments",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "generic_parameters",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "let_statement",
     "named": true,
     "fields": {},
@@ -133,6 +207,25 @@
         },
         {
           "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "named",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "generic_arguments",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -186,6 +279,10 @@
           "named": true
         },
         {
+          "type": "const_statement",
+          "named": true
+        },
+        {
           "type": "function_definition",
           "named": true
         },
@@ -214,7 +311,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "named",
+          "named": true
+        },
+        {
+          "type": "type_array",
           "named": true
         },
         {
@@ -246,6 +347,18 @@
           "named": true
         },
         {
+          "type": "type_ptr",
+          "named": true
+        },
+        {
+          "type": "type_ptr_raw",
+          "named": true
+        },
+        {
+          "type": "type_ref",
+          "named": true
+        },
+        {
           "type": "type_u16",
           "named": true
         },
@@ -265,6 +378,60 @@
     }
   },
   {
+    "type": "type_array",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_ptr",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_ptr_raw",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "type_ref",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "type_statement",
     "named": true,
     "fields": {},
@@ -272,6 +439,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "generic_parameters",
+          "named": true
+        },
         {
           "type": "identifier",
           "named": true
@@ -296,11 +467,19 @@
     "named": false
   },
   {
+    "type": "&",
+    "named": false
+  },
+  {
     "type": "(",
     "named": false
   },
   {
     "type": ")",
+    "named": false
+  },
+  {
+    "type": "*",
     "named": false
   },
   {
@@ -320,13 +499,29 @@
     "named": false
   },
   {
+    "type": "[",
+    "named": false
+  },
+  {
+    "type": "]",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
   },
   {
+    "type": "const",
+    "named": false
+  },
+  {
     "type": "dedent",
     "named": true
+  },
+  {
+    "type": "false",
+    "named": false
   },
   {
     "type": "fn",
@@ -351,6 +546,14 @@
   {
     "type": "number",
     "named": true
+  },
+  {
+    "type": "raw",
+    "named": false
+  },
+  {
+    "type": "true",
+    "named": false
   },
   {
     "type": "type",
