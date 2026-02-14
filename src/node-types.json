@@ -111,6 +111,10 @@
         {
           "type": "type_identifier_path",
           "named": true
+        },
+        {
+          "type": "whitespace",
+          "named": true
         }
       ]
     }
@@ -294,6 +298,10 @@
         {
           "type": "union_definition",
           "named": true
+        },
+        {
+          "type": "whitespace",
+          "named": true
         }
       ]
     }
@@ -411,6 +419,10 @@
         },
         {
           "type": "type_identifier_path",
+          "named": true
+        },
+        {
+          "type": "whitespace",
           "named": true
         }
       ]
@@ -594,6 +606,10 @@
         {
           "type": "union_definition",
           "named": true
+        },
+        {
+          "type": "whitespace",
+          "named": true
         }
       ]
     }
@@ -772,6 +788,10 @@
         },
         {
           "type": "type_identifier_path",
+          "named": true
+        },
+        {
+          "type": "whitespace",
           "named": true
         }
       ]
@@ -1016,6 +1036,10 @@
         },
         {
           "type": "union_variant",
+          "named": true
+        },
+        {
+          "type": "whitespace",
           "named": true
         }
       ]
@@ -1292,6 +1316,10 @@
   {
     "type": "union",
     "named": false
+  },
+  {
+    "type": "whitespace",
+    "named": true
   },
   {
     "type": "{",

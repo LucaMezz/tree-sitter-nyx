@@ -10,9 +10,11 @@
 export default grammar({
   name: "nyx",
 
-  externals: $ => [$.newline, $.indent, $.dedent],
+  word: $ => $.identifier,
 
-  extras: $ => [/\s/, $.comment],
+  externals: $ => [$.newline, $.indent, $.dedent, $.whitespace],
+
+  extras: $ => [/[ \t]/, $.comment],
 
   rules: {
     source_file: $ => repeat($._statement),
@@ -44,7 +46,12 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
-      repeat($._statement),
+      optional($.whitespace),
+      $._statement,
+      repeat(seq(
+        $.whitespace,
+        $._statement
+      )),
       $.dedent
     ),
 
@@ -53,7 +60,12 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
-      repeat($._statement),
+      optional($.whitespace),
+      $._statement,
+      repeat(seq(
+        $.whitespace,
+        $._statement
+      )),
       $.dedent
     ),
 
@@ -116,7 +128,9 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
-      repeat1($.enum_variant),
+      optional($.whitespace),
+      $.enum_variant,
+      repeat(seq($.whitespace, $.enum_variant)),
       $.dedent
     ),
 
@@ -133,7 +147,9 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
-      repeat1($.union_variant),
+      optional($.whitespace),
+      $.union_variant,
+      repeat(seq($.whitespace, $.union_variant)),
       $.dedent
     ),
 
@@ -152,7 +168,9 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
-      repeat1($.struct_field),
+      optional($.whitespace),
+      $.struct_field,
+      repeat(seq($.whitespace, $.struct_field)),
       $.dedent
     ),
 
@@ -170,7 +188,9 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
-      repeat1($.function_declaration),
+      optional($.whitespace),
+      $.function_declaration,
+      repeat(seq($.whitespace, $.function_declaration)),
       $.dedent
     ),
 
