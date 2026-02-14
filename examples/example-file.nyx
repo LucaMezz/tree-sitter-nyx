@@ -4,17 +4,23 @@ fn main[T, U, V](x: i32, y: i32):
     let y = 10
     let x: &i32 = 10
     let z: *u32 = 345
+    mut z = "Jello?"
     let x: *raw = 389
     let msg: string = "Hello world!"
     let special = $"Hello {23}!"
+    io.println(msg)
 
 fn add(a: i32, b: i32) -> i32:
     let something = a + (b / 10) == 10
+    $"Result is {a.add(b)::C}"
 
 fn Vector2::add(a: i32) -> i32:
     let x = 10
 
-fn some_string() -> string:
+fn some_string[T]() -> string:
+    where
+        T: Display
+        U: Ord + Clone + Hash
     $"Hello {10}!"
 
 fn nop() -> ok:
@@ -27,12 +33,23 @@ type DoubleRaw = **raw
 type Array[T] = SomeOther[T]
 type Vector2::Alpine = i32
 
-enum Dog as u8:
+enum[u8] Dog:
+    requires
+        Display
+        Debug
     BULLFOG = 0
     POODLE = 10
     BEAGLE = 20
 
+enum[u8] Dog::Color:
+    BLACK = 0
+    BROWN
+    WHITE = 2
+
 union std::Either[U, V]:
+    requires
+        Display
+        Debug
     Left: U
     Right: V
 
@@ -46,15 +63,18 @@ packed struct Bits:
     c: u32
 
 interface Drawable[T]:
-    fn draw(self) -> ok
-    fn resize(self, width: T, height: T) -> ok
+    extends
+        Display
+        Debug
+    fn draw(self: Self) -> ok
+    fn resize(self: Self, width: T, height: T) -> ok
 
 interface Iterator[T]:
-    fn next(self) -> Option[T]
+    fn next(self: Self) -> Option[T]
 
 const HELLO_THERE = true
 
-namespace std::io::println:
-    fn example() -> ok
+namespace Hello:
+    pass
 
 let x = 10

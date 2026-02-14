@@ -23,6 +23,7 @@ export default grammar({
       $.pass_statement,
       $.function_definition,
       $.let_statement,
+      $.mut_statement,
       $.const_statement,
       $.type_statement,
       $.enum_definition,
@@ -60,6 +61,7 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
+      optional($.where_clause),
       optional($.whitespace),
       $._statement,
       repeat(seq(
@@ -103,6 +105,15 @@ export default grammar({
       $.newline
     ),
 
+    mut_statement: $ => seq(
+      "mut",
+      $.identifier,
+      optional(seq(":", $.type_annotation)),
+      "=",
+      $.expression,
+      $.newline
+    ),
+
     const_statement: $ => seq(
       "const",
       $.identifier,
@@ -123,11 +134,12 @@ export default grammar({
 
     enum_definition: $ => seq(
       "enum",
+      optional(seq("[", $.type_annotation, "]")),
       $.type_identifier_path,
-      optional(seq("as", $.type_annotation)),
       ":",
       $.newline,
       $.indent,
+      optional($.requires_clause),
       optional($.whitespace),
       $.enum_variant,
       repeat(seq($.whitespace, $.enum_variant)),
@@ -147,6 +159,8 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
+      optional($.requires_clause),
+      optional($.where_clause),
       optional($.whitespace),
       $.union_variant,
       repeat(seq($.whitespace, $.union_variant)),
@@ -168,6 +182,8 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
+      optional($.requires_clause),
+      optional($.where_clause),
       optional($.whitespace),
       $.struct_field,
       repeat(seq($.whitespace, $.struct_field)),
@@ -188,11 +204,47 @@ export default grammar({
       ":",
       $.newline,
       $.indent,
+      optional($.extends_clause),
+      optional($.where_clause),
       optional($.whitespace),
       $.function_declaration,
       repeat(seq($.whitespace, $.function_declaration)),
       $.dedent
     ),
+
+    where_clause: $ => seq(
+      "where",
+      $.newline,
+      $.indent,
+      repeat1($.constraint),
+      $.dedent
+    ),
+    constraint: $ => choice($.type_constraint),
+    type_constraint: $ => seq(
+      $.identifier,
+      ":",
+      $.bound,
+      $.newline
+    ),
+    bound: $ => sep1($.named, "+"),
+
+    requires_clause: $ => seq(
+      "requires",
+      $.newline,
+      $.indent,
+      repeat1($.requirement),
+      $.dedent
+    ),
+    requirement: $ => seq($.named, $.newline),
+
+    extends_clause: $ => seq(
+      "extends",
+      $.newline,
+      $.indent,
+      repeat1($.extension),
+      $.dedent
+    ),
+    extension: $ => seq($.named, $.newline),
 
     parameters: $ => sep1($.parameter, ","),
 
@@ -214,9 +266,17 @@ export default grammar({
       $.type_ref,
       $.type_ptr,
       $.type_ptr_raw,
-      $.named
+      $.named_path,
     ),
 
+
+    named_path: $ => seq(
+      optional(seq(
+        repeat1(seq($.named_scope, "::")),
+      )),
+      field("name", $.named)
+    ),
+    named_scope: $ => seq($.named),
     named: $ => seq($.identifier, optional($.generic_arguments)),
 
     generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
@@ -244,16 +304,28 @@ export default grammar({
     type_bool: $ => "bool",
 
     expression: $ => choice(
-      $.boolean,
-      $.number,
-      $.string,
-      $.interpolated_string,
-      $.identifier,
-      $.call_expression,
-      $.parenthesized_expression,
+      $.postfix_expression,
       $.unary_expression,
       $.binary_expression
     ),
+
+    primary_expression: $ => choice(
+      $.identifier,
+      $.number,
+      $.boolean,
+      $.string,
+      $.interpolated_string,
+      $.parenthesized_expression
+    ),
+
+    postfix_expression: $ => prec.left(12, seq(
+      $.primary_expression,
+      repeat(choice(
+        seq(".", $.identifier, optional($.generic_arguments)),      // member access
+        seq("::", $.identifier, optional($.generic_arguments)),     // namespace/type access
+        seq("(", optional($.arguments), ")") // function call
+      ))
+    )),
 
     call_expression: $ => seq(
       $.identifier,

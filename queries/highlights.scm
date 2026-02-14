@@ -13,8 +13,12 @@
 "interface" @keyword
 "namespace" @keyword
 "pass" @keyword
-"as" @keyword
 "packed" @keyword
+"where" @keyword
+"requires" @keyword
+"extends" @keyword
+"mut" @keyword
+; "as" @keyword
 ; "if" @keyword
 ; "else" @keyword
 ; "match" @keyword
@@ -24,9 +28,6 @@
 ; "return" @keyword
 ; "break" @keyword
 ; "continue" @keyword
-; "requires" @keyword
-; "where" @keyword
-; "mut" @keyword
 ; "pub" @keyword
 
 
@@ -62,9 +63,6 @@
   )
 )
 
-(call_expression
-  (identifier) @function.call
-)
 (parameter
   (identifier) @variable.parameter
 )
@@ -102,6 +100,16 @@
   )
 )
 
+(type_constraint
+  (identifier) @type.definition
+)
+
+;; Highlight generic arguments normally
+(named_scope
+  (named
+    (identifier) @module
+))
+
 ; punctuation
 "(" @punctuation.bracket
 ")" @punctuation.bracket
@@ -113,6 +121,7 @@
 "::" @operator
 ":" @punctuation.delimiter
 "," @punctuation.delimiter
+"." @operator
 "->" @operator
 ; "=>" @operator
 "+" @operator

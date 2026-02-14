@@ -35,7 +35,7 @@
     "fields": {}
   },
   {
-    "type": "call_expression",
+    "type": "bound",
     "named": true,
     "fields": {},
     "children": {
@@ -43,11 +43,7 @@
       "required": true,
       "types": [
         {
-          "type": "arguments",
-          "named": true
-        },
-        {
-          "type": "identifier",
+          "type": "named",
           "named": true
         }
       ]
@@ -81,6 +77,21 @@
     }
   },
   {
+    "type": "constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "type_constraint",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "enum_definition",
     "named": true,
     "fields": {},
@@ -102,6 +113,10 @@
         },
         {
           "type": "newline",
+          "named": true
+        },
+        {
+          "type": "requires_clause",
           "named": true
         },
         {
@@ -155,31 +170,7 @@
           "named": true
         },
         {
-          "type": "boolean",
-          "named": true
-        },
-        {
-          "type": "call_expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "interpolated_string",
-          "named": true
-        },
-        {
-          "type": "number",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "string",
+          "type": "postfix_expression",
           "named": true
         },
         {
@@ -199,6 +190,52 @@
       "types": [
         {
           "type": "expression",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extends_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
+          "type": "extension",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "extension",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "named",
           "named": true
         },
         {
@@ -276,6 +313,10 @@
           "named": true
         },
         {
+          "type": "mut_statement",
+          "named": true
+        },
+        {
           "type": "namespace_definition",
           "named": true
         },
@@ -297,6 +338,10 @@
         },
         {
           "type": "union_definition",
+          "named": true
+        },
+        {
+          "type": "where_clause",
           "named": true
         },
         {
@@ -402,6 +447,10 @@
           "named": true
         },
         {
+          "type": "extends_clause",
+          "named": true
+        },
+        {
           "type": "function_declaration",
           "named": true
         },
@@ -419,6 +468,10 @@
         },
         {
           "type": "type_identifier_path",
+          "named": true
+        },
+        {
+          "type": "where_clause",
           "named": true
         },
         {
@@ -517,6 +570,33 @@
     }
   },
   {
+    "type": "mut_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "named",
     "named": true,
     "fields": {},
@@ -530,6 +610,47 @@
         },
         {
           "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "named_path",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "named",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "named_scope",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "named_scope",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "named",
           "named": true
         }
       ]
@@ -581,6 +702,10 @@
         },
         {
           "type": "let_statement",
+          "named": true
+        },
+        {
+          "type": "mut_statement",
           "named": true
         },
         {
@@ -694,6 +819,114 @@
     }
   },
   {
+    "type": "postfix_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "arguments",
+          "named": true
+        },
+        {
+          "type": "generic_arguments",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "primary_expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "primary_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "boolean",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "interpolated_string",
+          "named": true
+        },
+        {
+          "type": "number",
+          "named": true
+        },
+        {
+          "type": "parenthesized_expression",
+          "named": true
+        },
+        {
+          "type": "string",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "requirement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "named",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "requires_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "requirement",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "source_file",
     "named": true,
     "root": true,
@@ -728,6 +961,10 @@
         },
         {
           "type": "let_statement",
+          "named": true
+        },
+        {
+          "type": "mut_statement",
           "named": true
         },
         {
@@ -783,11 +1020,19 @@
           "named": true
         },
         {
+          "type": "requires_clause",
+          "named": true
+        },
+        {
           "type": "struct_field",
           "named": true
         },
         {
           "type": "type_identifier_path",
+          "named": true
+        },
+        {
+          "type": "where_clause",
           "named": true
         },
         {
@@ -829,7 +1074,7 @@
       "required": true,
       "types": [
         {
-          "type": "named",
+          "type": "named_path",
           "named": true
         },
         {
@@ -909,6 +1154,29 @@
         },
         {
           "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_constraint",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "bound",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "newline",
           "named": true
         }
       ]
@@ -1031,11 +1299,19 @@
           "named": true
         },
         {
+          "type": "requires_clause",
+          "named": true
+        },
+        {
           "type": "type_identifier_path",
           "named": true
         },
         {
           "type": "union_variant",
+          "named": true
+        },
+        {
+          "type": "where_clause",
           "named": true
         },
         {
@@ -1063,6 +1339,33 @@
         },
         {
           "type": "type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "where_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "constraint",
+          "named": true
+        },
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "newline",
           "named": true
         }
       ]
@@ -1129,6 +1432,10 @@
     "named": false
   },
   {
+    "type": ".",
+    "named": false
+  },
+  {
     "type": "/",
     "named": false
   },
@@ -1185,10 +1492,6 @@
     "named": false
   },
   {
-    "type": "as",
-    "named": false
-  },
-  {
     "type": "comment",
     "named": true,
     "extra": true
@@ -1203,6 +1506,10 @@
   },
   {
     "type": "enum",
+    "named": false
+  },
+  {
+    "type": "extends",
     "named": false
   },
   {
@@ -1230,6 +1537,10 @@
     "named": false
   },
   {
+    "type": "mut",
+    "named": false
+  },
+  {
     "type": "namespace",
     "named": false
   },
@@ -1251,6 +1562,10 @@
   },
   {
     "type": "raw",
+    "named": false
+  },
+  {
+    "type": "requires",
     "named": false
   },
   {
@@ -1315,6 +1630,10 @@
   },
   {
     "type": "union",
+    "named": false
+  },
+  {
+    "type": "where",
     "named": false
   },
   {
