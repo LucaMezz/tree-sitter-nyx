@@ -1,0 +1,52 @@
+// Test unified path system and new syntax
+
+// Simple path
+fn simple()
+    pass
+
+// Namespace path
+fn std::print()
+    pass
+
+// Path with generics
+fn Vec[T].push()
+    pass
+
+// Complex namespace path with generics
+fn std::collections::HashMap[K, V].insert()
+    pass
+
+// Type with method
+fn *T.clone()
+    pass
+
+// Array type with method
+fn i32[20].sum()
+    pass
+
+// Slice type with method
+fn u8[].len()
+    pass
+
+// Namespace declaration
+namespace std::io::fs
+    pass
+
+// Type with generics
+type Vec[T] = std::Vec[T]
+
+// Struct with generics
+struct Container[T]
+    data: T[]
+    size: usize
+
+// Enum with repr type
+enum[u8] Status
+    Ok = 0
+    Error = 1
+
+// Function with constraints
+fn process[T](item: T) -> T
+    where
+        T: Display + Debug
+    pass

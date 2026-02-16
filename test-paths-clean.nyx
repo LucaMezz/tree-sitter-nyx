@@ -17,11 +17,11 @@ fn *T.clone()
     pass
 
 // 5. Slice type . method
-fn []u8.len()
+fn u8[].len()
     pass
 
 // 6. Array type . method
-fn [20]i32.sum()
+fn i32[20].sum()
     pass
 
 // 7. Namespace :: Type . method (complex)

@@ -1,37 +1,41 @@
-fn main[T, U, V](x: i32, y: i32)
-    let x: u64 = 5
-    const PI: f64 = 3.14
-    let y = 10
-    let x: &i32 = 10
-    let z: *u32 = 345
-    mut z = "Jello?"
-    let x: *raw = 389
-    let msg: string = "Hello world!"
-    let special = $"Hello {23}!"
-    io.println(msg)
+impl[T, U, V] GenericContext[T, U, V]
+    fn main(self: *GenericContext[T, U, V], x: i32, y: i32)
+        let x: u64 = 5
+        const PI: f64 = 3.14
+        let y = 10
+        let x: *i32 = 10
+        let z: *u32 = 345
+        mut z = "Jello?"
+        let x: *raw = 389
+        let msg: string = "Hello world!"
+        let special = $"Hello {23}!"
+        io.println(msg)
 
 fn add(a: i32, b: i32) -> i32
     let something = a + (b / 10) == 10
     $"Result is {a.add(b)::C}"
 
-fn! Vector2.add(a: &i32)
-    self.x += a
-    self.y += a
+impl Vector2
+    fn! add(self: *mut Vector2, a: *i32)
+        self.x += a
+        self.y += a
 
 struct Ref[T]
-    ptr: *const T
+    ptr: *T
 
 struct MutRef[T]
     ptr: *T
 
-fn Something::upper_the_string(ref: Ref[string]) -> string
-    ref.to_uppercase()
+impl Something
+    fn upper_the_string(ref: Ref[string]) -> string
+        ref.to_uppercase()
 
-fn some_string[T]() -> string
+impl[T] T
     where
         T: Display
         U: Ord + Clone + Hash
-    $"Hello {10}!"
+    fn some_string(self: T) -> string
+        $"Hello {10}!"
 
 fn nop() -> ok
     pass
@@ -43,7 +47,7 @@ type DoubleRaw = **raw
 type Array[T] = SomeOther[T]
 type Vector2::Alpine = i32
 
-enum[u8] Dog
+enum<u8> Dog
     requires
         Display
         Debug
@@ -64,7 +68,7 @@ union std::Either[U, V]
     Right: V
 
 struct Vector[T]
-    arr: []T
+    arr: T[]
     len: usize
 
 packed struct Bits

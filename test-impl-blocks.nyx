@@ -1,0 +1,78 @@
+// Test impl blocks - Rust-style implementation blocks without traits
+
+// Simple impl block - no generics
+impl Vector2
+    fn new(x: i32, y: i32) -> Vector2
+        pass
+    
+    fn add(self: *Vector2, other: *Vector2) -> Vector2
+        pass
+
+// Impl block with generics
+impl[T] Vec[T]
+    fn new() -> Vec[T]
+        pass
+    
+    fn push(self: *mut Vec[T], item: T)
+        pass
+    
+    fn len(self: *Vec[T]) -> usize
+        pass
+
+// Impl block with where clause
+impl[T] Option[T]
+    where
+        T: Clone
+    fn clone(self: *Option[T]) -> Option[T]
+        pass
+
+// Impl block with multiple type parameters
+impl[K, V] HashMap[K, V]
+    where
+        K: Hash + Eq
+    fn insert(self: *mut HashMap[K, V], key: K, value: V)
+        pass
+    
+    fn get(self: *HashMap[K, V], key: K) -> ?*V
+        pass
+
+// Impl block for pointer types
+impl[T] *T
+    fn is_null(self: *T) -> bool
+        pass
+    
+    fn as_ref(self: *T) -> ?*T
+        pass
+
+// Impl block for array types
+impl[T] T[]
+    fn len(self: *T[]) -> usize
+        pass
+    
+    fn get(self: *T[], index: usize) -> ?*T
+        pass
+
+// Impl block for mutable pointer types
+impl[T] *mut T
+    fn write(self: *mut T, value: T)
+        pass
+
+// Nested in namespace
+namespace std::collections
+    impl[T] LinkedList[T]
+        fn new() -> LinkedList[T]
+            pass
+        
+        fn push_front(self: *mut LinkedList[T], value: T)
+            pass
+
+// Multiple impl blocks for same type with different constraints
+impl[T] Result[T, string]
+    fn unwrap(self: Result[T, string]) -> T
+        pass
+
+impl[T, E] Result[T, E]
+    where
+        E: Display
+    fn unwrap_or_log(self: Result[T, E]) -> T
+        pass

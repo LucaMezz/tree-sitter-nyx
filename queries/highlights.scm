@@ -1,68 +1,101 @@
-; comments
+; ==============================================================================
+; COMMENTS
+; ==============================================================================
+
 (comment) @comment
 
-; keywords
-"extern" @keyword
-"fn" @keyword
-"let" @keyword
-"type" @keyword
-"const" @keyword
-"enum" @keyword
-"union" @keyword
-"struct" @keyword
-"interface" @keyword
-"namespace" @keyword
-"pass" @keyword
-"packed" @keyword
-"where" @keyword
-"requires" @keyword
-"extends" @keyword
-"mut" @keyword
-; "as" @keyword
-; "if" @keyword
-; "else" @keyword
-; "match" @keyword
-; "while" @keyword
-; "for" @keyword
-; "in" @keyword
-; "return" @keyword
-; "break" @keyword
-; "continue" @keyword
-; "pub" @keyword
+; ==============================================================================
+; KEYWORDS
+; ==============================================================================
+
+[
+  "extern"
+  "fn"
+  "let"
+  "mut"
+  "const"
+  "type"
+  "enum"
+  "union"
+  "struct"
+  "interface"
+  "namespace"
+  "impl"
+  "pass"
+  "packed"
+  "where"
+  "requires"
+  "extends"
+] @keyword
+
+; ==============================================================================
+; BUILT-IN VALUES
+; ==============================================================================
 
 "self" @variable.builtin
-
 (builtin_namespace) @namespace.builtin
 
-; types
-; "Self" @type
-(type_u8) @type.builtin
-(type_u16) @type.builtin
-(type_u32) @type.builtin
-(type_u64) @type.builtin
-(type_i8) @type.builtin
-(type_i16) @type.builtin
-(type_i32) @type.builtin
-(type_i64) @type.builtin
-(type_f32) @type.builtin
-(type_f64) @type.builtin
-(type_bool) @type.builtin
+; ==============================================================================
+; TYPES
+; ==============================================================================
 
-; identifiers
-(identifier) @variable
+; Built-in types
+[
+  (type_u8)
+  (type_u16)
+  (type_u32)
+  (type_u64)
+  (type_i8)
+  (type_i16)
+  (type_i32)
+  (type_i64)
+  (type_f32)
+  (type_f64)
+  (type_bool)
+] @type.builtin
 
-; functions
-(function_signature
-  (function_path
-    (identifier) @function
+; Path segments in type contexts
+(path
+  (path_segment
+    (identifier) @type
+    (generic_arguments)? @type.argument
   )
 )
+
+; Standalone path segments
 (path_segment
-  (identifier) @module
-)
-(type_identifier_path
   (identifier) @type
 )
+
+; Generic arguments
+(generic_arguments) @punctuation.bracket
+(generic_arguments
+  (type_annotation)
+)
+
+; ==============================================================================
+; FUNCTIONS
+; ==============================================================================
+
+(function_signature
+  (path
+    (path_segment
+      (identifier) @function
+    )
+  )
+)
+
+(postfix_expression
+  (primary_expression)
+  "::"
+  (identifier) @function
+)
+
+; ==============================================================================
+; VARIABLES AND PARAMETERS
+; ==============================================================================
+
+(identifier) @variable
 
 (parameter
   (identifier) @variable.parameter
@@ -76,12 +109,13 @@
   (identifier) @type.definition
 )
 
-(generic_arguments
-  (type_annotation) @type.argument
+(type_constraint
+  (identifier) @type.definition
 )
-(named
-  (identifier) @type
-)
+
+; ==============================================================================
+; ENUM, UNION, AND STRUCT MEMBERS
+; ==============================================================================
 
 (enum_variant
   (identifier) @constant
@@ -95,70 +129,77 @@
   (identifier) @variable.member
 )
 
+; ==============================================================================
+; NAMESPACES AND MODULES
+; ==============================================================================
+
 (namespace_definition
-  (namespace_path) @module
+  (path
+    (path_segment
+      (identifier) @module
+    )
+  )
 )
 
-(type_constraint
-  (identifier) @type.definition
+(path_segment
+  (builtin_namespace) @namespace.builtin
 )
 
-;; Highlight generic arguments normally
-(named_scope
-  (named
-    (identifier) @module
-))
+; ==============================================================================
+; OPERATORS
+; ==============================================================================
 
-; punctuation
-"(" @punctuation.bracket
-")" @punctuation.bracket
-"[" @punctuation.bracket
-"]" @punctuation.bracket
-"{" @punctuation.bracket
-"}" @punctuation.bracket
-"=" @operator
-"::" @operator
-":" @punctuation.delimiter
-"," @punctuation.delimiter
-"." @operator
-"->" @operator
-; "=>" @operator
-"?" @operator
-"+" @operator
-"-" @operator
-"*" @operator
-"/" @operator
-"%" @operator
-"==" @operator
-"!=" @operator
-"<" @operator
-">" @operator
-"<=" @operator
-">=" @operator
-"&&" @operator
-"||" @operator
-"!" @operator
-"&" @operator
-"|" @operator
-"^" @operator
-"~" @operator
-"<<" @operator
-">>" @operator
-; "+=" @operator
-; "-=" @operator
-; "*=" @operator
-; "/=" @operator
-; "%=" @operator
-; "&=" @operator
-; "|=" @operator
-; "^=" @operator
-; "~=" @operator
-; "<<=" @operator
-; ">>=" @operator
+[
+  "="
+  "::"
+  "."
+  "->"
+  "?"
+  "+"
+  "-"
+  "*"
+  "/"
+  "%"
+  "=="
+  "!="
+  "<"
+  ">"
+  "<="
+  ">="
+  "&&"
+  "||"
+  "!"
+  "&"
+  "|"
+  "^"
+  "~"
+  "<<"
+  ">>"
+] @operator
 
+; ==============================================================================
+; PUNCTUATION
+; ==============================================================================
 
-; literals
+[
+  ":"
+  ","
+] @punctuation.delimiter
+
+[
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+] @punctuation.bracket
+
+; ==============================================================================
+; LITERALS
+; ==============================================================================
+
 (number) @number
+(boolean) @boolean
 (string) @string
 (interpolated_string) @string
-(boolean) @boolean

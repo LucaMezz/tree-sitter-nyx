@@ -1,0 +1,16 @@
+// Test case demonstrating why [$.path, $.type_ptr] conflict is needed
+
+// Case 1: *T.something - Must be a path (type_ptr followed by .method)
+fn *T.clone()
+    pass
+
+// Case 2: fn returning *T - Just a type_ptr (no dot after)
+fn get_ptr() -> *T
+    pass
+
+// The parser seeing "*T•" doesn't know yet if:
+// - There's a "." coming (path with method call)
+// - Nothing coming (just a type_ptr)
+//
+// This creates an unavoidable shift/reduce conflict that requires
+// lookahead to resolve.

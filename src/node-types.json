@@ -15,6 +15,69 @@
     }
   },
   {
+    "type": "base_type",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "path",
+          "named": true
+        },
+        {
+          "type": "type_bool",
+          "named": true
+        },
+        {
+          "type": "type_f32",
+          "named": true
+        },
+        {
+          "type": "type_f64",
+          "named": true
+        },
+        {
+          "type": "type_i16",
+          "named": true
+        },
+        {
+          "type": "type_i32",
+          "named": true
+        },
+        {
+          "type": "type_i64",
+          "named": true
+        },
+        {
+          "type": "type_i8",
+          "named": true
+        },
+        {
+          "type": "type_u16",
+          "named": true
+        },
+        {
+          "type": "type_u32",
+          "named": true
+        },
+        {
+          "type": "type_u64",
+          "named": true
+        },
+        {
+          "type": "type_u8",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "binary_expression",
     "named": true,
     "fields": {},
@@ -43,11 +106,16 @@
       "required": true,
       "types": [
         {
-          "type": "named",
+          "type": "path",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "builtin_namespace",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "const_statement",
@@ -116,15 +184,15 @@
           "named": true
         },
         {
+          "type": "path",
+          "named": true
+        },
+        {
           "type": "requires_clause",
           "named": true
         },
         {
           "type": "type_annotation",
-          "named": true
-        },
-        {
-          "type": "type_identifier_path",
           "named": true
         },
         {
@@ -235,11 +303,11 @@
       "required": true,
       "types": [
         {
-          "type": "named",
+          "type": "newline",
           "named": true
         },
         {
-          "type": "newline",
+          "type": "path",
           "named": true
         }
       ]
@@ -305,6 +373,10 @@
           "named": true
         },
         {
+          "type": "impl_block",
+          "named": true
+        },
+        {
           "type": "indent",
           "named": true
         },
@@ -356,29 +428,6 @@
     }
   },
   {
-    "type": "function_path",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "namespace_path",
-          "named": true
-        },
-        {
-          "type": "type_annotation",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "function_signature",
     "named": true,
     "fields": {},
@@ -387,15 +436,11 @@
       "required": true,
       "types": [
         {
-          "type": "function_path",
-          "named": true
-        },
-        {
-          "type": "generic_parameters",
-          "named": true
-        },
-        {
           "type": "parameters",
+          "named": true
+        },
+        {
+          "type": "path",
           "named": true
         },
         {
@@ -436,6 +481,53 @@
     }
   },
   {
+    "type": "impl_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
+          "type": "function_declaration",
+          "named": true
+        },
+        {
+          "type": "function_definition",
+          "named": true
+        },
+        {
+          "type": "generic_parameters",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
+          "named": true
+        },
+        {
+          "type": "where_clause",
+          "named": true
+        },
+        {
+          "type": "whitespace",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "interface_definition",
     "named": true,
     "fields": {},
@@ -468,7 +560,7 @@
           "named": true
         },
         {
-          "type": "type_identifier_path",
+          "type": "path",
           "named": true
         },
         {
@@ -598,66 +690,6 @@
     }
   },
   {
-    "type": "named",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "generic_arguments",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "named_path",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "named",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "named_scope",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "named_scope",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "named",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "namespace_definition",
     "named": true,
     "fields": {},
@@ -694,6 +726,10 @@
           "named": true
         },
         {
+          "type": "impl_block",
+          "named": true
+        },
+        {
           "type": "indent",
           "named": true
         },
@@ -714,15 +750,15 @@
           "named": true
         },
         {
-          "type": "namespace_path",
-          "named": true
-        },
-        {
           "type": "newline",
           "named": true
         },
         {
           "type": "pass_statement",
+          "named": true
+        },
+        {
+          "type": "path",
           "named": true
         },
         {
@@ -735,21 +771,6 @@
         },
         {
           "type": "union_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "namespace_path",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
           "named": true
         }
       ]
@@ -814,6 +835,44 @@
       "types": [
         {
           "type": "newline",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "path",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "path_segment",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "path_segment",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "builtin_namespace",
+          "named": true
+        },
+        {
+          "type": "generic_arguments",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -894,11 +953,11 @@
       "required": true,
       "types": [
         {
-          "type": "named",
+          "type": "newline",
           "named": true
         },
         {
-          "type": "newline",
+          "type": "path",
           "named": true
         }
       ]
@@ -962,6 +1021,10 @@
         },
         {
           "type": "function_definition",
+          "named": true
+        },
+        {
+          "type": "impl_block",
           "named": true
         },
         {
@@ -1029,15 +1092,15 @@
           "named": true
         },
         {
+          "type": "path",
+          "named": true
+        },
+        {
           "type": "requires_clause",
           "named": true
         },
         {
           "type": "struct_field",
-          "named": true
-        },
-        {
-          "type": "type_identifier_path",
           "named": true
         },
         {
@@ -1083,82 +1146,11 @@
       "required": true,
       "types": [
         {
-          "type": "named_path",
-          "named": true
-        },
-        {
-          "type": "type_array",
-          "named": true
-        },
-        {
-          "type": "type_bool",
-          "named": true
-        },
-        {
-          "type": "type_f32",
-          "named": true
-        },
-        {
-          "type": "type_f64",
-          "named": true
-        },
-        {
-          "type": "type_i16",
-          "named": true
-        },
-        {
-          "type": "type_i32",
-          "named": true
-        },
-        {
-          "type": "type_i64",
-          "named": true
-        },
-        {
-          "type": "type_i8",
+          "type": "base_type",
           "named": true
         },
         {
           "type": "type_ptr",
-          "named": true
-        },
-        {
-          "type": "type_slice",
-          "named": true
-        },
-        {
-          "type": "type_u16",
-          "named": true
-        },
-        {
-          "type": "type_u32",
-          "named": true
-        },
-        {
-          "type": "type_u64",
-          "named": true
-        },
-        {
-          "type": "type_u8",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_array",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "type_annotation",
           "named": true
         }
       ]
@@ -1188,37 +1180,7 @@
     }
   },
   {
-    "type": "type_identifier_path",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "namespace_path",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "type_ptr",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "type_annotation",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_slice",
     "named": true,
     "fields": {},
     "children": {
@@ -1249,11 +1211,11 @@
           "named": true
         },
         {
-          "type": "type_annotation",
+          "type": "path",
           "named": true
         },
         {
-          "type": "type_identifier_path",
+          "type": "type_annotation",
           "named": true
         }
       ]
@@ -1299,11 +1261,11 @@
           "named": true
         },
         {
-          "type": "requires_clause",
+          "type": "path",
           "named": true
         },
         {
-          "type": "type_identifier_path",
+          "type": "requires_clause",
           "named": true
         },
         {
@@ -1496,12 +1458,20 @@
     "named": false
   },
   {
+    "type": "alloc",
+    "named": false
+  },
+  {
     "type": "comment",
     "named": true,
     "extra": true
   },
   {
     "type": "const",
+    "named": false
+  },
+  {
+    "type": "core",
     "named": false
   },
   {
@@ -1531,6 +1501,10 @@
   {
     "type": "identifier",
     "named": true
+  },
+  {
+    "type": "impl",
+    "named": false
   },
   {
     "type": "indent",
@@ -1574,6 +1548,10 @@
   },
   {
     "type": "self",
+    "named": false
+  },
+  {
+    "type": "std",
     "named": false
   },
   {

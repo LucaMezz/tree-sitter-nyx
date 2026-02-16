@@ -1,0 +1,29 @@
+// Test postfix array/slice syntax with square bracket generics
+
+// Simple slice
+fn test_slice(data: u8[]) -> u64
+    pass
+
+// Simple array
+fn test_array(data: i32[100]) -> i32
+    pass
+
+// Pointer to slice
+fn test_ptr_slice(data: *u8[]) -> u64
+    pass
+
+// Pointer to array  
+fn test_ptr_array(data: *i32[50]) -> i32
+    pass
+
+// Generic type with array
+fn test_generic[T](data: T[20]) -> T
+    pass
+
+// Complex type paths with arrays
+type ByteSlice = u8[]
+type IntArray = i32[256]
+type GenericArray[T] = T[100]
+
+// Multi-dimensional arrays
+type Matrix = i32[10][20]

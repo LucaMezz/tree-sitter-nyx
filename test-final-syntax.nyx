@@ -1,0 +1,37 @@
+// Final syntax test: square brackets for generics, postfix arrays/slices
+
+// Impl blocks with generics
+impl[T, U] Mapper[T, U]
+    fn map(self: *Mapper[T, U], input: T) -> U
+        pass
+
+struct Vec[T]
+    data: T[]
+    len: usize
+
+type HashMap[K, V] = std::HashMap[K, V]
+
+// Postfix arrays and slices
+fn process_slice(data: u8[]) -> u64
+    pass
+
+fn process_array(data: i32[100]) -> i32
+    pass
+
+// Multi-dimensional
+type Matrix = i32[10][20][]
+
+// Combined with pointers
+fn get_ptr_to_array() -> *i32[50]
+    pass
+
+// Impl with Arrays
+impl[T] Array[T]
+    fn complex(self: *Array[T], items: T[100]) -> T[]
+        pass
+
+// Enum with representation type
+enum[u8] Color
+    Red = 0
+    Green = 1
+    Blue = 2

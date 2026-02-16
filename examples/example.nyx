@@ -100,7 +100,7 @@ struct Matrix[T, U, V, W, X, Y, Z]:
         Z: Ord
     rows: i32
     cols: i32
-    data: [][]T
+    data: []T[]
 
 // Thus function demonstrates the use of an anonymous union type as a 
 // return type, which can be one of several types depending on the conditions

@@ -17,10 +17,7 @@ export default grammar({
   extras: $ => [/[ \t]/, $.comment],
 
   conflicts: $ => [
-    [$.namespace_path, $.named],
-    [$.function_path, $.named],
-    [$.generic_parameters, $.primary_expression],
-    [$.namespace_path],
+    [$.path_segment],
   ],
 
   rules: {
@@ -39,6 +36,7 @@ export default grammar({
       $.struct_definition,
       $.interface_definition,
       $.namespace_definition,
+      $.impl_block,
       $.expression_statement,
       $.comment,
     ),
@@ -51,10 +49,27 @@ export default grammar({
 
     namespace_definition: $ => seq(
       "namespace",
-      $.namespace_path,
+      $.path,
       $.newline,
       $.indent,
       repeat1($._statement),
+      $.dedent
+    ),
+
+    impl_block: $ => seq(
+      "impl",
+      optional($.generic_parameters),
+      ":",
+      $.type_annotation,
+      $.newline,
+      $.indent,
+      optional($.where_clause),
+      optional($.whitespace),
+      choice($.function_definition, $.function_declaration),
+      repeat(seq(
+        $.whitespace,
+        choice($.function_definition, $.function_declaration)
+      )),
       $.dedent
     ),
 
@@ -81,37 +96,27 @@ export default grammar({
       optional("extern"),
       "fn",
       optional("!"),
-      optional($.generic_parameters),
-      $.function_path,
-      optional($.generic_parameters),
+      $.path,
       "(",
       optional($.parameters),
       ")",
       optional(seq("->", $.type_annotation))
     ),
 
-    // Simple namespace path for namespace declarations: std::io::fs
-    namespace_path: $ => prec.left(sep1(choice($.identifier, $.builtin_namespace), "::")),
-
-    // Type name path for type definitions: Dog::Color, std::Vec, etc.
-    // Uses the same syntax as namespace_path
-    type_identifier_path: $ => $.namespace_path,
-
-    // Complex function path supporting:
-    // - identifier: main
-    // - namespace::identifier: std::print
-    // - type.identifier: Vector2.add, *T.add_to
-    // - namespace::type.identifier: std::Vec[T].push
-    function_path: $ => seq(
-      optional(seq($.namespace_path, "::")),
-      choice(
-        $.identifier,
-        seq($.type_annotation, ".", $.identifier)
-      )
+    // Unified path rule that handles all path types:
+    // - Simple: identifier
+    // - Namespaced: std::identifier, core::io::print
+    // - With generics: Vec[T], std::Vec[T]
+    path: $ => seq(
+      $.path_segment,
+      repeat(seq("::", $.path_segment))
     ),
 
-    path_segment_before_dot: $ => choice($.path_segment),
-    path_segment: $ => choice($.builtin_namespace, $.identifier),
+    path_segment: $ => seq(
+      choice($.identifier, $.builtin_namespace),
+      optional($.generic_arguments)
+    ),
+
     builtin_namespace: $ => choice("std", "core", "alloc"),
 
     let_statement: $ => seq(
@@ -143,7 +148,7 @@ export default grammar({
 
     type_statement: $ => seq(
       "type",
-      $.type_identifier_path,
+      $.path,
       optional($.generic_parameters),
       "=",
       $.type_annotation,
@@ -153,7 +158,7 @@ export default grammar({
     enum_definition: $ => seq(
       "enum",
       optional(seq("[", $.type_annotation, "]")),
-      $.type_identifier_path,
+      $.path,
       $.newline,
       $.indent,
       optional($.requires_clause),
@@ -171,7 +176,7 @@ export default grammar({
 
     union_definition: $ => seq(
       "union",
-      $.type_identifier_path,
+      $.path,
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -193,7 +198,7 @@ export default grammar({
     struct_definition: $ => seq(
       optional("packed"),
       "struct",
-      $.type_identifier_path,
+      $.path,
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -214,7 +219,7 @@ export default grammar({
 
     interface_definition: $ => seq(
       "interface",
-      $.type_identifier_path,
+      $.path,
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -240,7 +245,7 @@ export default grammar({
       $.bound,
       $.newline
     ),
-    bound: $ => sep1($.named, "+"),
+    bound: $ => sep1($.path, "+"),
 
     requires_clause: $ => seq(
       "requires",
@@ -249,7 +254,7 @@ export default grammar({
       repeat1($.requirement),
       $.dedent
     ),
-    requirement: $ => seq($.named, $.newline),
+    requirement: $ => seq($.path, $.newline),
 
     extends_clause: $ => seq(
       "extends",
@@ -258,55 +263,49 @@ export default grammar({
       repeat1($.extension),
       $.dedent
     ),
-    extension: $ => seq($.named, $.newline),
+    extension: $ => seq($.path, $.newline),
 
     parameters: $ => sep1($.parameter, ","),
 
     parameter: $ => seq($.identifier, ":", $.type_annotation),
 
     type_annotation: $ => choice(
-      $.type_u8,
-      $.type_u16,
-      $.type_u32,
-      $.type_u64,
-      $.type_i8,
-      $.type_i16,
-      $.type_i32,
-      $.type_i64,
-      $.type_f32,
-      $.type_f64,
-      $.type_bool,
-      $.type_array,
-      $.type_slice,
       $.type_ptr,
-      $.named_path,
+      $.base_type,
     ),
 
-
-    named_path: $ => seq(
-      optional(seq(
-        repeat1(seq($.named_scope, "::")),
+    base_type: $ => prec(1, seq(
+      // Optional prefix array/slice operators
+      repeat(choice(
+        seq("[", $.expression, "]"),  // array: T[20]
+        seq("[", "]")                   // slice: T[]
       )),
-      field("name", $.named)
-    ),
-    named_scope: $ => seq($.named),
-    named: $ => seq($.identifier, optional($.generic_arguments)),
+      choice(
+        $.type_u8,
+        $.type_u16,
+        $.type_u32,
+        $.type_u64,
+        $.type_i8,
+        $.type_i16,
+        $.type_i32,
+        $.type_i64,
+        $.type_f32,
+        $.type_f64,
+        $.type_bool,
+        $.path,
+      ),
+    )),
 
-    generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
-
-    generic_parameters: $ => seq('[', sep1($.identifier, ","), ']'),
-
-    namespace_path: $ => sep1($.identifier, "::"),
-    type_path_segment: $ => choice($.type_annotation),
-
-    type_array: $ => seq("[", $.expression, "]", $.type_annotation),
-    type_slice: $ => seq("[", "]", $.type_annotation),
     type_ptr: $ => seq(
       optional("?"),
       "*",
       optional("mut"),
       $.type_annotation
     ),
+
+    generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
+
+    generic_parameters: $ => seq('[', sep1($.identifier, ","), ']'),
 
     type_u8: $ => "u8",
     type_u16: $ => "u16",

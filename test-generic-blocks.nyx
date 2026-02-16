@@ -1,0 +1,51 @@
+// Test impl blocks
+
+// Simple impl block
+impl[T] T
+    fn identity(self: T) -> T
+        pass
+
+// Impl block with where clause
+impl[T] T
+    where
+        T: Display + Clone
+    fn show(self: T)
+        pass
+
+// Impl block with method syntax - defines Array[T] methods for each T
+impl[T] Array[T]
+    fn push(self: *mut Array[T], item: T)
+        pass
+    
+    fn pop(self: *mut Array[T]) -> T
+        pass
+
+// Multiple type parameters
+impl[T, U] Converter[T, U]
+    fn convert(self: *Converter[T, U], x: T) -> U
+        pass
+
+// Impl block with pointer type methods
+impl[T] *T
+    fn add_to(self: *T, other: *T) -> *T
+        pass
+    
+    fn swap(self: *mut T, other: *mut T)
+        pass
+
+// Impl block implementing methods on custom type with generics
+impl[K, V] HashMap[K, V]
+    where
+        K: Hash + Eq
+        V: Clone
+    fn insert(self: *mut HashMap[K, V], key: K, value: V)
+        pass
+    
+    fn get(self: *HashMap[K, V], key: K) -> ?*V
+        pass
+
+// Nested namespace with impl block
+namespace std::collections
+    impl[T] Vec[T]
+        fn len(self: *Vec[T]) -> usize
+            pass
