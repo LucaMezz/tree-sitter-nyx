@@ -366,7 +366,8 @@ export default grammar({
 
     generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
 
-    generic_parameters: $ => seq('[', sep1($.identifier, ","), ']'),
+    generic_parameters: $ => seq('[', sep1($.generic_parameter, ","), ']'),
+    generic_parameter: $ => $.identifier,
 
     type_u8: $ => "u8",
     type_u16: $ => "u16",

@@ -1740,7 +1740,7 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "identifier"
+              "name": "generic_parameter"
             },
             {
               "type": "REPEAT",
@@ -1753,7 +1753,7 @@
                   },
                   {
                     "type": "SYMBOL",
-                    "name": "identifier"
+                    "name": "generic_parameter"
                   }
                 ]
               }
@@ -1765,6 +1765,10 @@
           "value": "]"
         }
       ]
+    },
+    "generic_parameter": {
+      "type": "SYMBOL",
+      "name": "identifier"
     },
     "type_u8": {
       "type": "STRING",

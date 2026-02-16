@@ -63,9 +63,7 @@
 ; GENERIC PARAMETERS (Must come before general @type rules)
 ; ==============================================================================
 
-(generic_parameters
-  (identifier) @type.definition
-)
+(generic_parameter) @type.definition
 
 (type_constraint
   (identifier) @type.definition
@@ -127,63 +125,6 @@
   )
 )
 
-; Type part in type-prefixed paths (e.g., Vec in ::Vec[T]::push)
-; These act as both types and namespaces, highlight as @module for consistency
-(function_signature
-  (path
-    "::"
-    (simple_type_annotation
-      (simple_base_type
-        (simple_path
-          (path_segment
-            (identifier) @module
-          )
-        )
-      )
-    )
-  )
-)
-
-; Type identifiers in pointer types within type-prefixed paths (e.g., T in ::*T::method)
-(function_signature
-  (path
-    "::"
-    (simple_type_annotation
-      (simple_type_ptr
-        (simple_type_annotation
-          (simple_base_type
-            (simple_path
-              (path_segment
-                (identifier) @type
-              )
-            )
-          )
-        )
-      )
-    )
-  )
-)
-
-; Nested pointer types (e.g., ::*mut T::method)
-(function_signature
-  (path
-    "::"
-    (simple_type_annotation
-      (simple_type_ptr
-        (simple_type_annotation
-          (simple_base_type
-            (simple_path
-              (path_segment
-                (identifier) @type
-              )
-            )
-          )
-        )
-      )
-    )
-  )
-)
-
 ; In function signatures, all path_segments except the last should be @module
 ; This pattern matches path_segments in a path that has multiple segments
 (function_signature
@@ -218,15 +159,15 @@
 ; ==============================================================================
 
 ; Types in type_annotation contexts
-(type_annotation
-  (base_type
-    (path
-      (path_segment
-        (identifier) @type
-      )
-    )
-  )
-)
+; (type_annotation
+;   (base_type
+;     (path
+;       (path_segment
+;         (identifier) @type
+;       )
+;     )
+;   )
+; )
 
 ; Types in struct definitions
 (struct_definition

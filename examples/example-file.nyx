@@ -1,4 +1,4 @@
-impl[T, U, V] GenericContext[T, U, V]
+impl[T, U, V]: GenericContext[T, U, V]
     fn main(self: *GenericContext[T, U, V], x: i32, y: i32)
         let x: u64 = 5
         const PI: f64 = 3.14
