@@ -5,3 +5,4 @@
 ((enum_definition) @indent)
 ((interface_definition) @indent)
 ((namespace_definition) @indent)
+((impl_block) @indent)

@@ -1,0 +1,39 @@
+// Test highlighting
+
+// Function with namespaced name
+fn std::io::print(msg: string)
+    pass
+
+// Struct with generic
+struct Vec[T]
+    data: T[]
+    len: usize
+
+// Type with namespace
+type MyVec = std::collections::Vec[i32]
+
+// Impl block with generics
+impl[K, V] HashMap[K, V]
+    where
+        K: Hash
+    fn new() -> HashMap[K, V]
+        pass
+    
+    fn insert(self: *mut HashMap[K, V], key: K, value: V)
+        pass
+
+// Impl block with namespace path
+impl std::Vec[i32]
+    fn sum(self: *std::Vec[i32]) -> i32
+        pass
+
+// Function with simple name
+fn add(a: i32, b: i32) -> i32
+    pass
+
+// Enum with namespace
+enum std::Option[T]
+    Some = 0
+    None = 1
+
+let x: std::Vec[i32] = something()
