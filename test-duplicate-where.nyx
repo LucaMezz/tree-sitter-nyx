@@ -1,0 +1,7 @@
+// Test: struct with duplicate where clauses (should fail)
+struct Point[T]
+    where
+        T: Display
+    where
+        T: Debug
+    x: T

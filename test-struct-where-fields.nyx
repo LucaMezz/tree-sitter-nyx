@@ -1,0 +1,6 @@
+// Test: struct with where clause and fields
+struct Point[T]
+    where
+        T: Display
+    x: T
+    y: T

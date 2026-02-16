@@ -1,0 +1,6 @@
+// Test: interface with extends and where clauses (should succeed)  
+interface Printable[T]
+    extends Display
+    where
+        T: Debug
+    fn print() -> void

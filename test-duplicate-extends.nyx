@@ -1,0 +1,5 @@
+// Test: interface with duplicate extends clauses (should fail)
+interface Comparable[T]
+    extends Display
+    extends Debug
+    fn compare(other: T) -> i32

@@ -1,0 +1,6 @@
+
+// Test: function with where clause
+fn test[T]()
+    where
+        T: Display
+    pass

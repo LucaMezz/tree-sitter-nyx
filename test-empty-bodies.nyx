@@ -1,0 +1,70 @@
+// Test empty interfaces and structs with various configurations
+
+// Empty struct - no body at all
+struct Point
+
+// Empty interface - no body at all
+interface Display
+
+// Struct with only where clause - no fields
+struct Container[T]
+    where
+        T: Display
+
+// Interface with only extends clause - no functions
+interface Drawable
+    extends
+        Display
+
+// Interface with only where clause - no functions
+interface Generic[T]
+    where
+        T: Clone
+
+// Struct with both clauses - no fields
+struct Complex[T, U]
+    requires
+        Display
+    where
+        T: Clone
+        U: Debug
+
+// Interface with both clauses - no functions
+interface Advanced[T]
+    extends
+        Display
+    where
+        T: Clone
+
+// Struct with fields only - no clauses
+struct Vec2
+    x: f32
+    y: f32
+
+// Interface with functions only - no clauses
+interface Show
+    fn show(self: *Self) -> string
+
+// Struct with where clause and fields
+struct Point3D[T]
+    where
+        T: Add
+    x: T
+    y: T
+    z: T
+
+// Interface with extends clause and functions
+interface Renderer
+    extends
+        Drawable
+    fn render(self: *Self)
+    fn resize(self: *mut Self, width: u32, height: u32)
+
+// Interface with both clauses and functions
+interface FullInterface[T, U]
+    extends
+        Display
+    where
+        T: Clone
+        U: Debug
+    fn process(self: *Self, t: T, u: U) -> bool

@@ -1,0 +1,4 @@
+struct Point[T]
+    where
+        T: Display
+    x: T

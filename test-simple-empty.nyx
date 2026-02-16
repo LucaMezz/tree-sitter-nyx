@@ -1,0 +1,9 @@
+// Simple test cases
+
+// Case 1: Empty struct
+struct Point
+
+// Case 2: Struct with only where clause
+struct Container
+    where
+        T: Display

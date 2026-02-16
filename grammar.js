@@ -206,21 +206,43 @@ export default grammar({
       $.newline
     ),
 
-    struct_definition: $ => seq(
-      optional("packed"),
-      "struct",
-      field("name", $.path),
-      optional($.generic_parameters),
-      optional(seq(
+    struct_definition: $ => choice(
+      // Empty struct - no body
+      seq(
+        optional("packed"),
+        "struct",
+        field("name", $.path),
+        optional($.generic_parameters)
+      ),
+      // Struct with body
+      seq(
+        optional("packed"),
+        "struct",
+        field("name", $.path),
+        optional($.generic_parameters),
         $.newline,
         $.indent,
-        optional($.requires_clause),
-        optional($.where_clause),
-        optional($.whitespace),
-        $.struct_field,
-        repeat(seq($.whitespace, $.struct_field)),
+        choice(
+          // Clauses with fields (fields REQUIRED after clauses)
+          seq(
+            choice(
+              $.requires_clause,
+              $.where_clause,
+              seq($.requires_clause, $.where_clause),
+              seq($.where_clause, $.requires_clause)
+            ),
+            $.struct_field,
+            repeat(seq($.whitespace, $.struct_field))
+          ),
+          // Just fields (no clauses)
+          seq(
+            optional($.whitespace),
+            $.struct_field,
+            repeat(seq($.whitespace, $.struct_field))
+          )
+        ),
         $.dedent
-      ))
+      )
     ),
 
     struct_field: $ => seq(
@@ -230,21 +252,43 @@ export default grammar({
       $.newline
     ),
 
-    interface_definition: $ => seq(
-      optional($.annotations),
-      "interface",
-      field("name", $.path),
-      optional($.generic_parameters),
-      optional(seq(
+    interface_definition: $ => choice(
+      // Empty interface - no body
+      seq(
+        optional($.annotations),
+        "interface",
+        field("name", $.path),
+        optional($.generic_parameters)
+      ),
+      // Interface with body
+      seq(
+        optional($.annotations),
+        "interface",
+        field("name", $.path),
+        optional($.generic_parameters),
         $.newline,
         $.indent,
-        optional($.extends_clause),
-        optional($.where_clause),
-        optional($.whitespace),
-        $.function_declaration,
-        repeat(seq($.whitespace, $.function_declaration)),
+        choice(
+          // Clauses with functions (functions REQUIRED after clauses)
+          seq(
+            choice(
+              $.extends_clause,
+              $.where_clause,
+              seq($.extends_clause, $.where_clause),
+              seq($.where_clause, $.extends_clause)
+            ),
+            $.function_declaration,
+            repeat(seq($.whitespace, $.function_declaration))
+          ),
+          // Just functions (no clauses)
+          seq(
+            optional($.whitespace),
+            $.function_declaration,
+            repeat(seq($.whitespace, $.function_declaration))
+          )
+        ),
         $.dedent
-      ))
+      )
     ),
 
     where_clause: $ => seq(

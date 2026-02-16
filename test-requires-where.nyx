@@ -1,0 +1,7 @@
+// Test: struct with requires and where clauses (should succeed)
+struct Container[T, U]
+    requires T
+    where
+        U: Display
+    data: T
+    label: U

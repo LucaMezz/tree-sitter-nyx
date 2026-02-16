@@ -1,0 +1,4 @@
+// Minimal test - struct with only fields (no where clause)
+struct Point
+    x: i32
+    y: i32

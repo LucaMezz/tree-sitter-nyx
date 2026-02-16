@@ -1,0 +1,7 @@
+// Test impl block
+
+impl[T] : Vec[T]
+    where
+        T: Clone
+    fn push(self: *mut Self, item: T)
+        pass
