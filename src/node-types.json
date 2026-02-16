@@ -518,6 +518,10 @@
           "named": true
         },
         {
+          "type": "uses_clause",
+          "named": true
+        },
+        {
           "type": "where_clause",
           "named": true
         },
@@ -1129,6 +1133,25 @@
     }
   },
   {
+    "type": "resource",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "path",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "simple_base_type",
     "named": true,
     "fields": {},
@@ -1608,6 +1631,37 @@
     }
   },
   {
+    "type": "uses_clause",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "path",
+          "named": true
+        },
+        {
+          "type": "resource",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "where_clause",
     "named": true,
     "fields": {},
@@ -1925,6 +1979,10 @@
   },
   {
     "type": "union",
+    "named": false
+  },
+  {
+    "type": "uses",
     "named": false
   },
   {

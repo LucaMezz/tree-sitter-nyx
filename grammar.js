@@ -75,6 +75,7 @@ export default grammar({
       $.newline,
       $.indent,
       optional($.where_clause),
+      optional($.uses_clause),
       optional($.whitespace),
       $._statement,
       repeat(seq(
@@ -290,6 +291,23 @@ export default grammar({
         $.dedent
       )
     ),
+
+    uses_clause: $ => seq(
+      "uses",
+      choice(
+        seq(
+          $.newline,
+          $.indent,
+          repeat1($.resource),
+          $.dedent
+        ),
+        seq(
+          sep1($.path, ","),
+          $.newline
+        ),
+      )
+    ),
+    resource: $ => seq($.path, $.newline),
 
     where_clause: $ => seq(
       "where",

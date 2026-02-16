@@ -1,4 +1,3 @@
-; ==============================================================================
 ; COMMENTS
 ; ==============================================================================
 
@@ -10,11 +9,11 @@
 
 ; All-caps identifiers are constants
 ((identifier) @constant
- (#match? @constant "^[A-Z][A-Z\\d_]*$"))
+ (#match? @constant "^[A-Z][A-Z\\d_]*$")
+ (#not-has-ancestor? generic_parameter))
 
-; PascalCase identifiers in paths are types
-(path_segment (identifier) @type
- (#match? @type "^[A-Z]"))
+((identifier) @type
+  (#match? @type "^[A-Z]"))
 
 ; Lowercase identifiers in paths (not at end of function signature) are namespaces
 (path_segment (identifier) @module
@@ -45,6 +44,7 @@
   "where"
   "requires"
   "extends"
+  "uses"
 ] @keyword
 
 ; ==============================================================================
@@ -79,50 +79,12 @@
     (path_segment (builtin_namespace) @function) .))
 
 ; ==============================================================================
-; TYPE DEFINITIONS
-; ==============================================================================
-
-; Struct definitions
-(struct_definition
-  name: (path
-    (path_segment (identifier) @type)))
-
-; Enum definitions
-(enum_definition
-  name: (path
-    (path_segment (identifier) @type)))
-
-; Union definitions
-(union_definition
-  name: (path
-    (path_segment (identifier) @type)))
-
-; Interface definitions
-(interface_definition
-  name: (path
-    (path_segment (identifier) @type)))
-
-; Type aliases
-(type_statement
-  name: (path
-    (path_segment (identifier) @type)))
-
-; ==============================================================================
 ; NAMESPACE DEFINITIONS
 ; ==============================================================================
 
 (namespace_definition
   name: (path
     (path_segment (identifier) @module)))
-
-; ==============================================================================
-; GENERIC PARAMETERS
-; ==============================================================================
-
-(generic_parameter) @type.definition
-
-(type_constraint
-  (identifier) @type.definition)
 
 ; ==============================================================================
 ; VARIABLES, CONSTANTS, AND PARAMETERS
