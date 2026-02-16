@@ -16,6 +16,13 @@ export default grammar({
 
   extras: $ => [/[ \t]/, $.comment],
 
+  conflicts: $ => [
+    [$.namespace_path, $.named],
+    [$.function_path, $.named],
+    [$.generic_parameters, $.primary_expression],
+    [$.namespace_path],
+  ],
+
   rules: {
     source_file: $ => repeat($._statement),
 
@@ -44,7 +51,7 @@ export default grammar({
 
     namespace_definition: $ => seq(
       "namespace",
-      $.identifier_path,
+      $.namespace_path,
       $.newline,
       $.indent,
       repeat1($._statement),
@@ -75,7 +82,7 @@ export default grammar({
       "fn",
       optional("!"),
       optional($.generic_parameters),
-      $.identifier_path,
+      $.function_path,
       optional($.generic_parameters),
       "(",
       optional($.parameters),
@@ -83,12 +90,23 @@ export default grammar({
       optional(seq("->", $.type_annotation))
     ),
 
-    type_identifier_path: $ => $.identifier_path,
-    identifier_path: $ => seq(
-      $.type_annotation,
+    // Simple namespace path for namespace declarations: std::io::fs
+    namespace_path: $ => prec.left(sep1(choice($.identifier, $.builtin_namespace), "::")),
+
+    // Type name path for type definitions: Dog::Color, std::Vec, etc.
+    // Uses the same syntax as namespace_path
+    type_identifier_path: $ => $.namespace_path,
+
+    // Complex function path supporting:
+    // - identifier: main
+    // - namespace::identifier: std::print
+    // - type.identifier: Vector2.add, *T.add_to
+    // - namespace::type.identifier: std::Vec[T].push
+    function_path: $ => seq(
+      optional(seq($.namespace_path, "::")),
       choice(
-        seq("::", field("name", $.identifier)),
-        seq(".", field("name", $.identifier))
+        $.identifier,
+        seq($.type_annotation, ".", $.identifier)
       )
     ),
 

@@ -53,17 +53,15 @@
 
 ; functions
 (function_signature
-  (identifier_path
+  (function_path
     (identifier) @function
-    )
+  )
 )
 (path_segment
   (identifier) @module
 )
 (type_identifier_path
-  (identifier_path
-    (identifier) @type
-  )
+  (identifier) @type
 )
 
 (parameter
@@ -98,9 +96,7 @@
 )
 
 (namespace_definition
-  (identifier_path
-    name: (_) @module
-  )
+  (namespace_path) @module
 )
 
 (type_constraint

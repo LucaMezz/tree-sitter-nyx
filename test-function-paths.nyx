@@ -1,0 +1,33 @@
+// Test various function path syntaxes
+
+// Simple function name
+fn main()
+    pass
+
+// Namespaced function
+fn std::io::print(msg: string)
+    pass
+
+// Method on a type
+fn Vector2.add(v: Vector2) -> Vector2
+    pass
+
+// Method on a pointer type
+fn[T] *T.add_to[U](other: *U) -> *T
+    pass
+
+// Method on an array type
+fn []T.len() -> u64
+    pass
+
+// Method on a fixed array type
+fn [20]u32.sum() -> u32
+    pass
+
+// Namespaced type with method
+fn core::memory::allocation::Allocator[T].alloc[U](size: u64) -> *T
+    pass
+
+// Namespace declaration
+namespace std::io::fs
+    pass
