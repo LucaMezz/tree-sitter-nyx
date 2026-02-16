@@ -22,6 +22,8 @@ export default grammar({
     // Both are valid: Vec[T] as path with generics, or Vec with [T] as parameters
     // GLR resolves this acceptably by preferring generic_parameters after path
     [$.path],
+    // Conflict: Inside index expressions, identifier could be start of path or primary expression
+    [$.path_segment, $.primary_expression],
   ],
 
   rules: {
@@ -53,7 +55,7 @@ export default grammar({
 
     namespace_definition: $ => seq(
       "namespace",
-      $.path,
+      field("name", $.path),
       $.newline,
       $.indent,
       repeat1($._statement),
@@ -64,7 +66,7 @@ export default grammar({
       "impl",
       optional($.generic_parameters),
       ":",
-      $.type_annotation,
+      field("type", $.type_annotation),
       $.newline,
       $.indent,
       optional($.where_clause),
@@ -101,7 +103,7 @@ export default grammar({
       "fn",
       optional("!"),
       optional($.generic_parameters),
-      $.path,
+      field("name", $.path),
       "(",
       optional($.parameters),
       ")",
@@ -139,7 +141,7 @@ export default grammar({
 
     let_statement: $ => seq(
       "let",
-      $.identifier,
+      field("name", $.identifier),
       optional(seq(":", $.type_annotation)),
       "=",
       $.expression,
@@ -148,7 +150,7 @@ export default grammar({
 
     mut_statement: $ => seq(
       "mut",
-      $.identifier,
+      field("name", $.identifier),
       optional(seq(":", $.type_annotation)),
       "=",
       $.expression,
@@ -157,7 +159,7 @@ export default grammar({
 
     const_statement: $ => seq(
       "const",
-      $.identifier,
+      field("name", $.identifier),
       optional(seq(":", $.type_annotation)),
       "=",
       $.expression,
@@ -166,7 +168,7 @@ export default grammar({
 
     type_statement: $ => seq(
       "type",
-      $.path,
+      field("name", $.path),
       optional($.generic_parameters),
       "=",
       $.type_annotation,
@@ -176,7 +178,7 @@ export default grammar({
     enum_definition: $ => seq(
       "enum",
       optional(seq("[", $.type_annotation, "]")),
-      $.path,
+      field("name", $.path),
       $.newline,
       $.indent,
       optional($.requires_clause),
@@ -187,14 +189,14 @@ export default grammar({
     ),
 
     enum_variant: $ => seq(
-      $.identifier,
+      field("name", $.identifier),
       optional(seq("=", $.expression)),
       $.newline
     ),
 
     union_definition: $ => seq(
       "union",
-      $.path,
+      field("name", $.path),
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -207,7 +209,7 @@ export default grammar({
     ),
 
     union_variant: $ => seq(
-      $.identifier,
+      field("name", $.identifier),
       ":",
       $.type_annotation,
       $.newline
@@ -216,7 +218,7 @@ export default grammar({
     struct_definition: $ => seq(
       optional("packed"),
       "struct",
-      $.path,
+      field("name", $.path),
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -229,7 +231,7 @@ export default grammar({
     ),
 
     struct_field: $ => seq(
-      $.identifier,
+      field("name", $.identifier),
       ":",
       $.type_annotation,
       $.newline
@@ -237,7 +239,7 @@ export default grammar({
 
     interface_definition: $ => seq(
       "interface",
-      $.path,
+      field("name", $.path),
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -285,7 +287,7 @@ export default grammar({
 
     parameters: $ => sep1($.parameter, ","),
 
-    parameter: $ => seq($.identifier, ":", $.type_annotation),
+    parameter: $ => seq(field("name", $.identifier), ":", $.type_annotation),
 
     type_annotation: $ => choice(
       $.type_ptr,
@@ -400,12 +402,19 @@ export default grammar({
     postfix_expression: $ => prec.left(12, seq(
       $.primary_expression,
       repeat(choice(
-        seq(".", optional("!"), $.identifier, optional($.generic_arguments)),      // member access
-        seq("::", $.identifier, optional($.generic_arguments)),     // namespace/type access
-        seq(optional("!"), "(", optional($.arguments), ")"), // function call
-        seq("[", $.expression, "]"), // array indexing
+        $.field_access,
+        $.type_access,
+        $.generic_arguments,
+        $.call_suffix,
+        $.index_suffix,
       ))
     )),
+
+    // Extracted postfix operations for easier highlighting
+    field_access: $ => seq(".", optional("!"), field("field", $.identifier)),
+    type_access: $ => seq("::", field("type", $.identifier)),
+    call_suffix: $ => seq(optional("!"), "(", optional($.arguments), ")"),
+    index_suffix: $ => seq("[", $.expression, "]"),
 
     call_expression: $ => seq(
       $.identifier,

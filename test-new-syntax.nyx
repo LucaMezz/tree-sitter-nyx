@@ -1,0 +1,27 @@
+// Test file with correct syntax
+
+fn greet()
+    pass
+
+fn add(a: i32, b: i32) -> i32
+    let result = a + b
+    result
+
+struct Point
+    x: i32
+    y: i32
+
+enum Color
+    Red
+    Green
+    Blue
+
+impl Point
+    fn origin() -> Point
+        Point
+    
+    fn distance(self: *Point) -> f64
+        self.x + self.y
+
+const MAX_SIZE = 100
+let value = 42
