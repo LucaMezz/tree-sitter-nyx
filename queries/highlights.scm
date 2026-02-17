@@ -7,8 +7,6 @@
 ; IDENTIFIER CONVENTIONS
 ; ==============================================================================
 
-; Generic type parameters (in function/struct/interface/etc definitions)
-(generic_parameter (identifier) @type.definition)
 
 ; All-caps identifiers are constants
 ((identifier) @constant
@@ -51,6 +49,15 @@
 ] @keyword
 
 ; ==============================================================================
+; GENERIC PARAMETERS
+; =============================================================================
+
+; Generic type parameters (in function/struct/interface/etc definitions)
+(generic_parameter (identifier) @type.definition)
+
+(type_constraint (identifier) @type.definition)
+
+; ==============================================================================
 ; FUNCTION CALLS
 ; ==============================================================================
 
@@ -74,19 +81,19 @@
 ; Function names - only the LAST path segment in function signatures
 ; This pattern uses anchoring to ensure we only match the final segment
 (function_signature
-  name: (simple_path
-    (path_segment (identifier) @function) .))
+  name: (name_path 
+    name: (path_segment (identifier) @function) .))
 
 (function_signature
-  name: (simple_path
-    (path_segment (builtin_namespace) @function) .))
+  name: (name_path
+    (path_segment (builtin_namespace) @module) .))
 
 ; ==============================================================================
 ; NAMESPACE DEFINITIONS
 ; ==============================================================================
 
 (namespace_definition
-  name: (simple_path
+  name: (name_path
     (path_segment (identifier) @module)))
 
 ; ==============================================================================

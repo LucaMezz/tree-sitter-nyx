@@ -17,10 +17,6 @@ export default grammar({
   extras: $ => [/[ \t]/, $.comment],
 
   conflicts: $ => [
-    // Conflict: In type/function/struct/etc definitions with generic parameters
-    // After the simple_path name, [ could be start of generic_parameters
-    // or could be continuing the path (though simple_path doesn't allow this)
-    [$.simple_path],
     // Conflict: Inside index expressions, identifier could be start of path or primary expression
     [$.path_segment, $.primary_expression],
   ],
@@ -60,7 +56,7 @@ export default grammar({
 
     namespace_definition: $ => seq(
       "namespace",
-      field("name", $.simple_path),
+      field("name", $.name_path),
       optional(seq(
         $.newline,
         $.indent,
@@ -93,7 +89,7 @@ export default grammar({
       optional("extern"),
       "fn",
       optional("!"),
-      field("name", $.simple_path),
+      field("name", $.name_path),
       optional($.generic_parameters),
       "(",
       optional($.parameters),
@@ -125,15 +121,16 @@ export default grammar({
     // Simple path WITHOUT generic arguments for definition names
     // Used for function names, struct names, enum names, etc.
     // Generic parameters are specified separately at the statement level
-    simple_path: $ => choice(
+    name_path: $ => prec(2, choice(
       // Type-prefixed path (must start with ::)
       seq("::", $.simple_type_annotation, repeat1(seq("::", $.path_segment))),
       // Namespaced path or simple identifier
       seq(
-        $.path_segment,
-        repeat(seq("::", $.path_segment))
+        repeat(seq($.segment_with_generics, "::")),
+        field("name", $.path_segment)
       )
-    ),
+    )),
+    segment_with_generics: $ => prec(1, seq($.path_segment, optional($.generic_arguments))),
 
     // Path segment WITHOUT generics (moved to path level)
     path_segment: $ => choice($.identifier, $.builtin_namespace),
@@ -169,7 +166,7 @@ export default grammar({
 
     type_statement: $ => seq(
       "type",
-      field("name", $.simple_path),
+      field("name", $.name_path),
       optional($.generic_parameters),
       "=",
       $.type_annotation,
@@ -179,7 +176,7 @@ export default grammar({
     enum_definition: $ => seq(
       "enum",
       optional(seq("[", $.type_annotation, "]")),
-      field("name", $.simple_path),
+      field("name", $.name_path),
       $.newline,
       $.indent,
       optional($.requires_clause),
@@ -197,7 +194,7 @@ export default grammar({
 
     union_definition: $ => seq(
       "union",
-      field("name", $.simple_path),
+      field("name", $.name_path),
       optional($.generic_parameters),
       $.newline,
       $.indent,
@@ -221,14 +218,14 @@ export default grammar({
       seq(
         optional("packed"),
         "struct",
-        field("name", $.simple_path),
+        field("name", $.name_path),
         optional($.generic_parameters)
       ),
       // Struct with body
       seq(
         optional("packed"),
         "struct",
-        field("name", $.simple_path),
+        field("name", $.name_path),
         optional($.generic_parameters),
         $.newline,
         $.indent,
@@ -267,14 +264,14 @@ export default grammar({
       seq(
         optional($.annotations),
         "interface",
-        field("name", $.simple_path),
+        field("name", $.name_path),
         optional($.generic_parameters)
       ),
       // Interface with body
       seq(
         optional($.annotations),
         "interface",
-        field("name", $.simple_path),
+        field("name", $.name_path),
         optional($.generic_parameters),
         $.newline,
         $.indent,
