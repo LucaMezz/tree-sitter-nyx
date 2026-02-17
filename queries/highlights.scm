@@ -18,7 +18,7 @@
 
 ; Lowercase identifiers in path segments (modules/namespaces)
 (path_segment (identifier) @module
- (#match? @module "^[a-z]"))
+  (#match? @module "^[a-z]"))
 
 (annotation
   name: (identifier) @attribute
@@ -81,11 +81,11 @@
 ; Function names - only the LAST path segment in function signatures
 ; This pattern uses anchoring to ensure we only match the final segment
 (function_signature
-  name: (name_path 
-    name: (path_segment (identifier) @function) .))
+  (function_name_path 
+    name: (identifier) @function ))
 
 (function_signature
-  name: (name_path
+  (function_name_path
     (path_segment (builtin_namespace) @module) .))
 
 ; ==============================================================================
