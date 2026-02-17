@@ -18,7 +18,7 @@ export default grammar({
 
   conflicts: $ => [
     [$.path_segment, $.primary_expression],
-    [$.function_name_path]
+    [$.function_name_path],
   ],
 
   rules: {
@@ -70,7 +70,6 @@ export default grammar({
       $.newline,
       $.indent,
       optional($.where_clause),
-      optional($.uses_clause),
       optional($.whitespace),
       $._statement,
       repeat(seq(
@@ -234,40 +233,19 @@ export default grammar({
     ),
 
     struct_definition: $ => choice(
-      // Empty struct - no body
-      seq(
-        optional("packed"),
-        "struct",
-        field("name", $.name_path),
-      ),
       // Struct with body
       seq(
         optional("packed"),
         "struct",
         field("name", $.name_path),
-        $.newline,
-        $.indent,
-        choice(
-          // Clauses with fields (fields REQUIRED after clauses)
-          seq(
-            choice(
-              $.requires_clause,
-              $.where_clause,
-              seq($.requires_clause, $.where_clause),
-              seq($.where_clause, $.requires_clause)
-            ),
-            $.struct_field,
-            repeat(seq($.whitespace, $.struct_field))
-          ),
-          // Just fields (no clauses)
-          seq(
-            optional($.whitespace),
-            $.struct_field,
-            repeat(seq($.whitespace, $.struct_field))
-          )
-        ),
-        $.dedent
-      )
+        optional(seq(
+          $.newline,
+          $.indent,
+          repeat(choice($.requires_clause, $.where_clause)),
+          repeat1($.struct_field),
+          $.dedent
+        ))
+      ),
     ),
 
     struct_field: $ => seq(
@@ -313,23 +291,6 @@ export default grammar({
         $.dedent
       )
     ),
-
-    uses_clause: $ => seq(
-      "uses",
-      choice(
-        seq(
-          $.newline,
-          $.indent,
-          repeat1($.resource),
-          $.dedent
-        ),
-        seq(
-          sep1($.path, ","),
-          $.newline
-        ),
-      )
-    ),
-    resource: $ => seq($.path, $.newline),
 
     where_clause: $ => seq(
       "where",
