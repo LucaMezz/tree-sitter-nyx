@@ -533,40 +533,6 @@
     }
   },
   {
-    "type": "function_name_path",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "generic_arguments",
-          "named": true
-        },
-        {
-          "type": "path_segment",
-          "named": true
-        },
-        {
-          "type": "simple_type_annotation",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "function_signature",
     "named": true,
     "fields": {},
@@ -575,11 +541,11 @@
       "required": true,
       "types": [
         {
-          "type": "function_name_path",
+          "type": "generic_parameters",
           "named": true
         },
         {
-          "type": "generic_parameters",
+          "type": "name_path",
           "named": true
         },
         {
@@ -845,7 +811,7 @@
         "required": false,
         "types": [
           {
-            "type": "identifier",
+            "type": "segment_with_generics",
             "named": true
           }
         ]
@@ -855,10 +821,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "generic_parameters",
-          "named": true
-        },
         {
           "type": "path_segment",
           "named": true

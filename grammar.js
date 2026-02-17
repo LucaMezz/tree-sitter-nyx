@@ -17,8 +17,8 @@ export default grammar({
   extras: $ => [/[ \t]/, $.comment],
 
   conflicts: $ => [
-    // Conflict: Inside index expressions, identifier could be start of path or primary expression
     [$.path_segment, $.primary_expression],
+    [$.name_path]
   ],
 
   rules: {
@@ -90,7 +90,7 @@ export default grammar({
       "fn",
       optional("!"),
       optional($.generic_parameters),
-      $.function_name_path,
+      $.name_path,
       optional(seq("::", $.generic_parameters)),
       "(",
       optional($.parameters),
@@ -110,8 +110,8 @@ export default grammar({
         seq("::", $.simple_type_annotation, repeat1(seq("::", $.path_segment))),
         // Namespaced path or simple identifier
         seq(
+          repeat(seq($.path_segment, "::")),
           $.path_segment,
-          repeat(seq("::", $.path_segment))
         )
       ),
       // Generic arguments only at the END of the complete path
@@ -119,7 +119,7 @@ export default grammar({
       optional($.generic_arguments)
     ),
 
-    name_path: $ => prec(2, choice(
+    name_path: $ => choice(
       // Type-prefixed path (must start with ::)
       seq(
         "::",
@@ -128,26 +128,10 @@ export default grammar({
       // Namespaced path or simple identifier
       seq(
         repeat(seq($.segment_with_generics, "::")),
-        seq(field("name", $.identifier), optional($.generic_parameters))
+        field("name", $.segment_with_generics)
       )
-    )),
-    segment_with_generics: $ => prec(1, seq($.path_segment, optional($.generic_arguments))),
-
-    function_name_path: $ => prec(2, choice(
-      // Type-prefixed path (must start with ::)
-      seq(
-        "::",
-        $.simple_type_annotation,
-        repeat1(seq("::", $.path_segment)),
-      ),
-      // Namespaced path or simple identifier
-      seq(
-        repeat(seq($.path_segment, optional($.generic_arguments), "::")),
-        seq(
-          field("name", $.identifier),
-        )
-      )
-    )),
+    ),
+    segment_with_generics: $ => seq($.path_segment, optional($.generic_arguments)),
 
     // Path segment WITHOUT generics (moved to path level)
     path_segment: $ => choice($.identifier, $.builtin_namespace),

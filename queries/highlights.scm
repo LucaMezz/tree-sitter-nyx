@@ -81,11 +81,12 @@
 ; Function names - only the LAST path segment in function signatures
 ; This pattern uses anchoring to ensure we only match the final segment
 (function_signature
-  (function_name_path 
-    name: (identifier) @function ))
+  (name_path 
+    name: (segment_with_generics
+      (path_segment (identifier) @function ))))
 
 (function_signature
-  (function_name_path
+  (name_path
     (path_segment (builtin_namespace) @module) .))
 
 ; ==============================================================================
@@ -95,6 +96,11 @@
 (namespace_definition
   name: (name_path
     (path_segment (identifier) @module)))
+
+(namespace_definition
+  name: (name_path
+    name: (segment_with_generics
+      (path_segment (identifier) @module ))))
 
 ; ==============================================================================
 ; VARIABLES, CONSTANTS, AND PARAMETERS
