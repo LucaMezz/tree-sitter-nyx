@@ -533,6 +533,44 @@
     }
   },
   {
+    "type": "function_name_path",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "path_segment",
+            "named": true
+          },
+          {
+            "type": "segment_with_generics",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "path_segment",
+          "named": true
+        },
+        {
+          "type": "segment_with_generics",
+          "named": true
+        },
+        {
+          "type": "simple_type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "function_signature",
     "named": true,
     "fields": {},
@@ -541,11 +579,11 @@
       "required": true,
       "types": [
         {
-          "type": "generic_parameters",
+          "type": "function_name_path",
           "named": true
         },
         {
-          "type": "name_path",
+          "type": "generic_parameters",
           "named": true
         },
         {
@@ -811,7 +849,7 @@
         "required": false,
         "types": [
           {
-            "type": "segment_with_generics",
+            "type": "path_segment",
             "named": true
           }
         ]
@@ -822,11 +860,11 @@
       "required": false,
       "types": [
         {
-          "type": "path_segment",
+          "type": "generic_parameters",
           "named": true
         },
         {
-          "type": "segment_with_generics",
+          "type": "path_segment",
           "named": true
         },
         {

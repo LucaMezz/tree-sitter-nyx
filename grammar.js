@@ -18,7 +18,7 @@ export default grammar({
 
   conflicts: $ => [
     [$.path_segment, $.primary_expression],
-    [$.name_path]
+    [$.function_name_path]
   ],
 
   rules: {
@@ -90,7 +90,7 @@ export default grammar({
       "fn",
       optional("!"),
       optional($.generic_parameters),
-      $.name_path,
+      $.function_name_path,
       optional(seq("::", $.generic_parameters)),
       "(",
       optional($.parameters),
@@ -125,6 +125,22 @@ export default grammar({
         "::",
         $.simple_type_annotation,
         repeat1(seq("::", $.path_segment))),
+      // Namespaced path or simple identifier
+      seq(
+        repeat(seq($.path_segment, "::")),
+        field("name", $.path_segment),
+        optional($.generic_parameters)
+      ),
+    ),
+
+    function_name_path: $ => choice(
+      // Type-prefixed path (must start with ::)
+      seq(
+        "::",
+        $.simple_type_annotation,
+        repeat(seq("::", $.path_segment)),
+        seq("::", field("name", $.path_segment)),
+      ),
       // Namespaced path or simple identifier
       seq(
         repeat(seq($.segment_with_generics, "::")),
