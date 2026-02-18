@@ -1,0 +1,11 @@
+interface Hello[T]
+
+interface Hello[T]
+    where
+        T: Copy
+    requires
+        Display
+
+interface Hello[T]
+    fn greet()
+

@@ -1,0 +1,3 @@
+union Either[U, V]
+    left: U
+    right: V

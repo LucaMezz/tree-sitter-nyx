@@ -70,7 +70,6 @@ export default grammar({
       $.newline,
       $.indent,
       optional($.where_clause),
-      optional($.whitespace),
       $._statement,
       repeat(seq(
         $.whitespace,
@@ -200,7 +199,6 @@ export default grammar({
       $.newline,
       $.indent,
       optional($.requires_clause),
-      optional($.whitespace),
       $.enum_variant,
       repeat(seq($.whitespace, $.enum_variant)),
       $.dedent
@@ -219,7 +217,6 @@ export default grammar({
       $.indent,
       optional($.requires_clause),
       optional($.where_clause),
-      optional($.whitespace),
       $.union_variant,
       repeat(seq($.whitespace, $.union_variant)),
       $.dedent
@@ -283,20 +280,11 @@ export default grammar({
         $.newline,
         $.indent,
         choice(
-          // Clauses with functions (functions REQUIRED after clauses)
+          // Clauses only (extends/where/requires, no functions)
+          repeat1(choice($.extends_clause, $.where_clause, $.requires_clause)),
+          // Functions only, or clauses followed by functions
           seq(
-            choice(
-              $.extends_clause,
-              $.where_clause,
-              seq($.extends_clause, $.where_clause),
-              seq($.where_clause, $.extends_clause)
-            ),
-            $.function_declaration,
-            repeat(seq($.whitespace, $.function_declaration))
-          ),
-          // Just functions (no clauses)
-          seq(
-            optional($.whitespace),
+            repeat(choice($.extends_clause, $.where_clause, $.requires_clause)),
             $.function_declaration,
             repeat(seq($.whitespace, $.function_declaration))
           )

@@ -1,0 +1,3 @@
+union Either
+    left: U
+    right: V

@@ -697,6 +697,10 @@
           "named": true
         },
         {
+          "type": "requires_clause",
+          "named": true
+        },
+        {
           "type": "where_clause",
           "named": true
         },

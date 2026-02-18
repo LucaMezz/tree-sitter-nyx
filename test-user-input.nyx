@@ -1,0 +1,10 @@
+struct Test[T]
+
+struct Test[T]
+	where
+        T: Something
+    a: i32
+    
+struct Test[T]
+	where
+        T: Something
