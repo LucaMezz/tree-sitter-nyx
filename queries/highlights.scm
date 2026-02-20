@@ -31,7 +31,7 @@
 
 [
   "extern"
-  "fn"
+  "func"
   "let"
   "mut"
   "const"
@@ -55,6 +55,10 @@
   "if"
   "elif"
   "else"
+  "public"
+  "private"
+  "export"
+  "block"
 ] @keyword
 
 ; ==============================================================================
@@ -94,14 +98,14 @@
   (type_name_path
     name: (path_segment
             (identifier) @function.builtin
-            (#match? @function.builtin "^(new|from|into)$"))))
+            (#match? @function.builtin "^(new|from|into|drop)$"))))
 
 (function_signature
   (type_name_path
     name: (segment_with_generics
             (path_segment
               (identifier) @function.builtin
-              (#match? @function.builtin "^(new|from|into)$")))))
+              (#match? @function.builtin "^(new|from|into|drop)$")))))
 
 ; This pattern uses anchoring to ensure we only match the final segment
 (function_signature
@@ -109,13 +113,13 @@
     name: (segment_with_generics
       (path_segment
         (identifier) @function 
-        (#not-match? @function "^(new|from|into)$")))))
+        (#not-match? @function "^(new|from|into|drop)$")))))
 
 (function_signature
   (type_name_path 
     name: (path_segment
       (identifier) @function
-      (#not-match? @function "^(new|from|into)$"))))
+      (#not-match? @function "^(new|from|into|drop)$"))))
 
 (function_signature
   (type_name_path
@@ -175,7 +179,12 @@
 ; BUILT-IN VALUES AND TYPES
 ; ==============================================================================
 
-"sizeof" @function.builtin
+[
+  "sizeof"
+  "alignof"
+  "offsetof"
+] @function.builtin
+
 "self" @variable.builtin
 ((identifier) @variable.builtin
   (#eq? @variable.builtin "self"))
@@ -239,6 +248,7 @@
 [
   ":"
   ","
+  ";"
 ] @punctuation.delimiter
 
 [

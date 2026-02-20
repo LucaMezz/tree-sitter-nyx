@@ -38,6 +38,7 @@ export default grammar({
       $.interface_definition,
       $.namespace_definition,
       $.expression_statement,
+      $.block_statement,
       $.using_statement,
       $.if_statement,
       $.for_loop,
@@ -55,11 +56,14 @@ export default grammar({
     ),
     annotations: $ => repeat1(seq($.annotation, $.newline)),
 
+
     pass_statement: $ => seq("pass", $.newline),
 
     expression_statement: $ => seq($.expression, $.newline),
 
     namespace_definition: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       "namespace",
       field("name", $.name_path),
       optional(seq(
@@ -71,6 +75,8 @@ export default grammar({
     ),
 
     using_statement: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       "using",
       field("name", $.name_path),
     ),
@@ -94,8 +100,10 @@ export default grammar({
     ),
 
     function_signature: $ => seq(
+      optional($.annotations),
+      optional($.visibility_modifier),
       optional("extern"),
-      "fn",
+      "func",
       optional("!"),
       optional($.generic_parameters),
       $.type_name_path,
@@ -173,6 +181,7 @@ export default grammar({
     ),
 
     let_statement: $ => seq(
+      optional($.annotations),
       "let",
       field("name", $.identifier),
       optional(seq(":", $.type_annotation)),
@@ -182,6 +191,7 @@ export default grammar({
     ),
 
     mut_statement: $ => seq(
+      optional($.annotations),
       "mut",
       field("name", $.identifier),
       optional(seq(":", $.type_annotation)),
@@ -191,6 +201,8 @@ export default grammar({
     ),
 
     const_statement: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       "const",
       optional($.generic_parameters),
       field("name", $.type_name_path),
@@ -198,6 +210,15 @@ export default grammar({
       "=",
       $.expression,
       $.newline
+    ),
+
+    block_statement: $ => seq(
+      "block",
+      optional(field("name", $.identifier)),
+      $.newline,
+      $.indent,
+      repeat1($._statement),
+      $.dedent
     ),
 
     if_statement: $ => choice(
@@ -242,6 +263,8 @@ export default grammar({
     ),
 
     type_statement: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       "type",
       field("name", $.name_path),
       "=",
@@ -250,6 +273,8 @@ export default grammar({
     ),
 
     enum_definition: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       "enum",
       optional(seq("[", $.type_annotation, "]")),
       field("name", $.name_path),
@@ -268,6 +293,8 @@ export default grammar({
     ),
 
     union_definition: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       "union",
       field("name", $.name_path),
       $.newline,
@@ -286,7 +313,10 @@ export default grammar({
       $.newline
     ),
 
+
     struct_definition: $ => seq(
+      optional($.visibility_modifier),
+      optional($.annotations),
       optional("packed"),
       "struct",
       field("name", $.name_path),
@@ -325,12 +355,14 @@ export default grammar({
     interface_definition: $ => choice(
       // Empty interface - no body
       seq(
+        optional($.visibility_modifier),
         optional($.annotations),
         "interface",
         field("name", $.name_path),
       ),
       // Interface with body
       seq(
+        optional($.visibility_modifier),
         optional($.annotations),
         "interface",
         field("name", $.name_path),
@@ -384,12 +416,23 @@ export default grammar({
     ),
     extension: $ => seq($.path, $.newline),
 
-    parameters: $ => sep1($.parameter, ","),
+    visibility_modifier: $ => choice("public", "export", "private"),
 
+    parameters: $ => seq(
+      optional($.self_parameter),
+      sep1($.parameter, ","),
+    ),
+
+    self_parameter: $ => seq(
+      optional("*"),
+      optional("mut"),
+      "self",
+    ),
     parameter: $ => seq(field("name", $.identifier), ":", $.type_annotation),
 
     type_annotation: $ => choice(
       $.type_ptr,
+      $.type_array_or_slice,
       $.base_type,
     ),
 
@@ -401,13 +444,18 @@ export default grammar({
       $.simple_base_type,
     ),
 
+    type_array_or_slice: $ => choice(
+      // Slice: [Type]
+      seq("[", $.type_annotation, "]"),
+      // Fixed-size array: [Type; expr]
+      seq("[", $.type_annotation, ";", $.expression, "]")
+    ),
+
     simple_base_type: $ => prec(1, seq(
       // Prefix array/slice operators (consistent with base_type)
-      repeat(choice(
-        seq("[", $.expression, "]"),  // array: [20]T
-        seq("[", "]"),                  // slice: []T
+      repeat(
         "?"
-      )),
+      ),
       choice(
         $.type_u8,
         $.type_u16,
@@ -439,11 +487,7 @@ export default grammar({
     ),
 
     base_type: $ => prec(1, seq(
-      // Optional postfix array/slice operators (moved here to allow paths with generics)
-      repeat(choice(
-        seq("[", $.expression, "]"),  // array: T[20]
-        seq("[", "]")                   // slice: T[]
-      )),
+      repeat("?"),
       choice(
         $.type_u8,
         $.type_u16,
@@ -474,7 +518,10 @@ export default grammar({
     generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
 
     generic_parameters: $ => seq('[', sep1($.generic_parameter, ","), ']'),
-    generic_parameter: $ => $.identifier,
+    generic_parameter: $ => seq(
+      $.identifier,
+      optional(seq("=", $.type_annotation))
+    ),
 
     type_u8: $ => "u8",
     type_u16: $ => "u16",
@@ -508,11 +555,21 @@ export default grammar({
       $.interpolated_string,
       $.parenthesized_expression,
       $.sizeof_expression,
+      $.alignof_expression,
+      $.offsetof_expression
     ),
 
     sizeof_expression: $ => seq(
       "sizeof",
       "(", $.type_annotation, ")"
+    ),
+    alignof_expression: $ => seq(
+      "alignof",
+      "(", $.type_annotation, ")"
+    ),
+    offsetof_expression: $ => seq(
+      "offsetof",
+      "(", $.type_annotation, ",", field("field", $.identifier), ")"
     ),
 
     as_expression: $ => seq(
