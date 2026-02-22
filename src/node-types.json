@@ -2124,6 +2124,10 @@
           "named": true
         },
         {
+          "type": "type_ok_error",
+          "named": true
+        },
+        {
           "type": "type_ptr",
           "named": true
         }
@@ -2205,6 +2209,25 @@
         },
         {
           "type": "simple_type_annotation",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_ok_error",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "path",
+          "named": true
+        },
+        {
+          "type": "type_annotation",
           "named": true
         }
       ]

@@ -111,7 +111,7 @@ export default grammar({
       "(",
       optional($.parameters),
       ")",
-      optional(seq("->", $.type_annotation))
+      optional(seq("->", sep1($.type_annotation, ",")))
     ),
 
     // Path WITH generic arguments for types and expressions
@@ -433,6 +433,7 @@ export default grammar({
     type_annotation: $ => choice(
       $.type_ptr,
       $.type_array_or_slice,
+      $.type_ok_error,
       $.base_type,
     ),
 
@@ -449,6 +450,12 @@ export default grammar({
       seq("[", $.type_annotation, "]"),
       // Fixed-size array: [Type; expr]
       seq("[", $.type_annotation, ";", $.expression, "]")
+    ),
+
+    type_ok_error: $ => seq(
+      $.type_annotation,
+      "!",
+      $.path
     ),
 
     simple_base_type: $ => prec(1, seq(
@@ -508,12 +515,12 @@ export default grammar({
       ),
     )),
 
-    type_ptr: $ => seq(
+    type_ptr: $ => prec(1, seq(
       optional("?"),
       "*",
       optional("mut"),
       $.type_annotation
-    ),
+    )),
 
     generic_arguments: $ => seq('[', sep1($.type_annotation, ","), ']'),
 
@@ -572,11 +579,11 @@ export default grammar({
       "(", $.type_annotation, ",", field("field", $.identifier), ")"
     ),
 
-    as_expression: $ => seq(
+    as_expression: $ => prec(2, seq(
       $.expression,
       "as",
       $.type_annotation
-    ),
+    )),
 
     postfix_expression: $ => prec.left(12, seq(
       $.primary_expression,
